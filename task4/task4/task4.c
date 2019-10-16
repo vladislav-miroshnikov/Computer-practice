@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+
 int simple(long long n)
 {
 	for (long long i = 2; i * i <= n; i++)
@@ -7,6 +8,7 @@ int simple(long long n)
 			return 0;
 	return 1;
 }
+
 int main()
 {
 	double c = 2;
