@@ -19,7 +19,7 @@ int checkinput(int w)
 	char e;
 	while (1)
 	{
-		if (!scanf_s("%d", &w) || getchar() != '\n')
+		if (!scanf_s("%d", &w) || w==0 || getchar() != '\n')
 		{
 			while ((e = getchar()) != '\n' && e != EOF);
 			printf_s("Entered incorrectly\nTry again: \n");
