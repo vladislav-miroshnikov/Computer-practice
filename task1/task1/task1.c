@@ -3,10 +3,11 @@
 #include <math.h>
 #include <string.h>
 
-void loc(long long r,int n)
+void loc (long long r, int n)
 {
-	int *a, i = 0;
-	a = (int*)malloc(n * sizeof(int));
+	int *a;
+	int i = 0;
+	a = (int*) malloc (n * sizeof(int));
 	
 	while (r != 0)
 	{			
@@ -15,8 +16,11 @@ void loc(long long r,int n)
 		i++;
 	}
 	
-	for (i = 0; i <= (n-1); i++)
-		printf("%d", a[(n-1)-i]);
+	for (i = 0; i <= (n - 1); i++)
+	{
+		printf("%d", a[(n - 1) - i]);
+	}
+
 	free(a);
 }
 
