@@ -20,20 +20,20 @@ double checkinput(double w)
 
 void prog(double w)
 {
-	int a0 = (int)sqrt(w), i = 0, a1, num = 1, den = 0;
-	printf("[%d; {", a0);
+	int b = (int)sqrt(w), i = 0, c, num = 1, den = 0;
+	printf("[%d; {", b);
 
 	do
 	{
-		a1 = a0 - den;
-		den = a1 + a0;
-		num = (w - a1 * a1) / num;
-		a1 = (int)(den / num);
+		c = b - den;
+		den = c + b;
+		num = (w - c * c) / num;
+		c = (int)(den / num);
 		den = den % num;
 		i++;
-		printf(" %d,", a1);
+		printf(" %d,", c);
 
-	} while (a1 != (2 * a0));
+	} while (c != (2 * b));
 
 	printf("} ]\nperiod is = %d ", i);
 }
