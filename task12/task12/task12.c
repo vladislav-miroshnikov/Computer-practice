@@ -1,23 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 int main()
 {
+	int n = (1 + (log(3) / log(16)) * 5000); //number of characters in hexadecimal notation
 	int* a;
-	a = (int*)malloc(5000 * sizeof(int));
+	a = (int*)malloc(n * sizeof(int));
 	int i,j;
-	for (i = 0; i <= 4999; i++)
+	for (i = 0; i <= n - 1; i++)
 	{
 		a[i] = 0;
 	}
 	a[0] = 1;
 	for (i = 0; i <= 4999; i++)
 	{
-		for (j = 0; j <= 4999; j++)
+		for (j = 0; j <= n - 1; j++)
 		{
 			a[j] = a[j] * 3;	
 		}
-		for (j = 0; j <= 4998; j++)
+		for (j = 0; j <= n - 2; j++)
 		{
 			if (a[j] > 15)
 			{
@@ -26,18 +28,10 @@ int main()
 			}
 		}
 	}
-	int k = 5000;
-	for (i = 4999; i >= 0; i--)
+	
+	for (i = n - 1; i >= 0; i--)
 	{
-		k = k - 1;
-		if (a[i] > 0)
-		{
-			for (k; k >= 0; k--)
-			{
-				printf("%x", a[k]);
-			}		
-			break;
-		}
+		printf("%x", a[i]);
 	}
 	free(a);
 
