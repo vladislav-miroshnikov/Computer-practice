@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 
-double checkinput(double w)
+double check_input(double w)
 {
 	char e;
 	while (1)
@@ -42,7 +42,7 @@ int main()
 {
 	double a = 0;
 	printf("Please, enter the number\n");
-	a = checkinput(a);
+	a = check_input(a);
 	prog(a);
 
 	return 0;
