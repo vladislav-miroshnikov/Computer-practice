@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int checkinput(int w)
+int check_input(int w)
 {
 	char e;
 	while (1)
@@ -23,32 +23,20 @@ int main()
 {
 	int n = 0;
 	printf("Please, enter the number\n");
-	n = checkinput(n);
+	n = check_input(n);
 	int coins[8] = { 1, 2, 5, 10, 20, 50, 100, 200 };
-	int* a;
+	long long* a;
 	int i, j;
-	a = (int*)malloc((n + 1) * 10 * sizeof(int));
-	for (i = 0; i <= n; i++)
+	a = (long long*)calloc((n + 1), sizeof(long long));
+	a[0] = 1;
+	for (i = 0; i <= 7; i++)
 	{
-		*(a + 0 * (n + 1) + i) = 0;
-	}
-	for (j = 0; j <= 9; j++)
-	{
-		*(a + j * (n + 1) + 0) = 1;
-	}
-	for (j = 0; j <= 7; j++)
-	{
-		for (i = coins[j]; i <= n; i++)
+		for (j = coins[i]; j <= n; j++)
 		{
-			*(a + (j + 1) * (n + 1) + i) = *(a + j * (n + 1) + i) + *(a + (j + 1) * (n + 1) + (i - coins[j]));
-		}
-
-		for (i = 1; i <= n; i++)
-		{
-			*(a + (j + 2) * (n + 1) + i) = *(a + (j + 1) * (n + 1) + i);
+			a[j] = a[j] + a[j - coins[i]];
 		}
 	}
-	printf("number of ways is %d", *(a + (j + 1) * (n + 1) + n));
+	printf("number of ways is %lld", a[n]);
 	free(a);
 
 	return 0;
