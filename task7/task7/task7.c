@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <malloc.h>
 
@@ -95,9 +96,11 @@ int rebalancing(Hash_table** card, int key, int value)
 	Hash_table* new_table = create((int)(*card)->array_size * (*card)->increase, (*card)->percent, (*card)->increase);
 	Dawn* assist = NULL;
 	int size = table->array_size;
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < size; i++) 
+	{
 		assist = table->array[i];
-		while (assist) {
+		while (assist) 
+		{
 			insert(&new_table, assist->key, assist->value);
 			assist = assist->next;
 
@@ -117,15 +120,20 @@ void find(Hash_table* card, int key)
 	unsigned long long hash = hash_func(key);
 	int index = (hash % card->array_size);
 	int c = 0;
-	if (card->array[index] != NULL) {
-		if ((card->array[index]->key) == key) {
+	if (card->array[index] != NULL)
+	{
+		if ((card->array[index]->key) == key)
+		{
 			printf("for key = %d value is %d\n", key, card->array[index]->value);
 			c = 1;
 		}
-		else {
+		else 
+		{
 			Dawn* assist = card->array[index]->next;
-			while (assist != NULL) {
-				if (assist->key == key) {
+			while (assist != NULL)
+			{
+				if (assist->key == key)
+				{
 					printf("for key = %d value is %d\n", key, assist->value);
 					c = 1;
 				}
@@ -142,11 +150,14 @@ void find(Hash_table* card, int key)
 }
 
 
-void remove_element(Hash_table* card, int key) {
+void remove_element(Hash_table* card, int key) 
+{
 	unsigned long long hash = hash_func(key);
 	int index = (hash % card->array_size);
-	if (card->array[index] != NULL) {
-		if (card->array[index]->key == key) {
+	if (card->array[index] != NULL) 
+	{
+		if (card->array[index]->key == key) 
+		{
 			printf("delete key %d and value %d\n", key, card->array[index]->value);
 			card->array[index] = card->array[index]->next;
 			card->size--;
@@ -171,7 +182,8 @@ void remove_element(Hash_table* card, int key) {
 	}
 }
 
-void clean(Hash_table** card) {
+void clean(Hash_table** card) 
+{
 	Hash_table* table = *card;
 	int i, size;
 	Dawn* assist = NULL;
@@ -179,9 +191,11 @@ void clean(Hash_table** card) {
 
 	size = table->array_size;
 
-	for (i = 0; i < size; i++) {
+	for (i = 0; i < size; i++)
+	{
 		assist = table->array[i];
-		while (assist) {
+		while (assist)
+		{
 			couple = assist;
 			assist = assist->next;
 			free(couple);
@@ -213,5 +227,22 @@ void main()
 	remove_element(map, 102000);
 	remove_element(map, 45645);
 	remove_element(map, 13123);
+	int k = 0;
+	while (scanf("%d", &k) != -1)
+	{
+		if (k == -1)
+		{
+			break;
+		}
+		find(map, k);
+	}
+	while (scanf("%d", &k) != -1)
+	{
+		if (k == -1)
+		{
+			break;
+		}
+		remove_element(map, k);
+	}
 	clean(&map);
 }
