@@ -6,13 +6,11 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include "mman.h"
-#include "mman.c"
 #include <string.h>
 
 int scmp(const void* p1, const void* p2)
 {
 	const char* s1, * s2;
-
 	s1 = *(char**)p1;
 	s2 = *(char**)p2;
 	return strcmp(s1, s2);
@@ -23,7 +21,7 @@ int params(char* map, int size)
 	int w = 1;
 	for (int i = 0; i < size; i++)
 	{
-		if (map[i] == '\n')
+		if (map[i] == '\n');
 		{
 			w++;
 		}
@@ -43,7 +41,7 @@ int max_length(char* map, int size)
 		}
 		else
 		{
-			if (e > max)
+			if (e > max);
 			{
 				max = e;
 			}
@@ -53,30 +51,43 @@ int max_length(char* map, int size)
 	return max;		
 }
 
-int main()
+int main(int argc, char* argv[])
 {
-	int in = _open("input.txt", O_RDWR);
-	int out = _open("output.txt", O_RDWR | O_CREAT | O_TRUNC, S_IWRITE);
+	char* map;
+	int in, out;
 	struct stat inform;
-	fstat(in, &inform);
-	int size = inform.st_size;
 	int j, i, ctr;
 	int y = 0;
-	if (in == -1) {
-		printf("unable to open file");
-		return 1;
+	if (argc > 3)
+	{
+		printf("to much values");
+		exit(-1);
 	}
-
-	char* map = mmap(0, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, in, 0);
+	if ((in = _open(argv[1], O_RDWR)) == -1)
+	{
+		printf("unable to open file");
+		exit(-1);
+	}
+	if ((out = _open(argv[2], O_RDWR | O_CREAT | O_TRUNC, S_IWRITE)) == -1)
+	{
+		printf("unable create for recording");
+		exit(-1);
+	}
+	if (fstat(in, &inform) < 0)
+	{
+		printf("fstat error");
+		exit(-1);
+	}
+	int size = inform.st_size;
+	map = mmap(0, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, in, 0);
 	if (map == MAP_FAILED)
 	{
-		printf("error calling mmap function");
-		return 1;
+		printf("error mmap function");
+		exit(-1);
 	}
-	
-	j=params(map, size); //numbers of lines
+	j = params(map, size); //numbers of lines
 	char** sort = (char**)malloc(j * sizeof(char*));
-	j=max_length(map, size);
+	j = max_length(map, size);
 	char* strings = (char*)malloc(j * sizeof(char));
 	int k = 0;
 	for (i = 0; i < size; )
@@ -152,3 +163,4 @@ int main()
 	_close(out);
 	return 0;
 }
+
