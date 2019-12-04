@@ -11,6 +11,7 @@
 int scmp(const void* p1, const void* p2)
 {
 	const char* s1, * s2;
+
 	s1 = *(char**)p1;
 	s2 = *(char**)p2;
 	return strcmp(s1, s2);
@@ -21,7 +22,7 @@ int params(char* map, int size)
 	int w = 1;
 	for (int i = 0; i < size; i++)
 	{
-		if (map[i] == '\n');
+		if (map[i] == '\n')
 		{
 			w++;
 		}
@@ -41,28 +42,25 @@ int max_length(char* map, int size)
 		}
 		else
 		{
-			if (e > max);
+			if (e > max)
 			{
 				max = e;
 			}
 			e = 0;
 		}
 	}
-	return max;		
+	return max;
 }
 
 int main(int argc, char* argv[])
 {
-	char* map;
 	int in, out;
-	struct stat inform;
-	int j, i, ctr;
-	int y = 0;
-	if (argc > 3)
+	if (argc != 3)
 	{
-		printf("to much values");
+		printf("insufficiently passed parameters");
 		exit(-1);
 	}
+
 	if ((in = _open(argv[1], O_RDWR)) == -1)
 	{
 		printf("unable to open file");
@@ -73,18 +71,23 @@ int main(int argc, char* argv[])
 		printf("unable create for recording");
 		exit(-1);
 	}
-	if (fstat(in, &inform) < 0)
-	{
-		printf("fstat error");
-		exit(-1);
-	}
+	struct stat inform;
+	fstat(in, &inform);
 	int size = inform.st_size;
-	map = mmap(0, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, in, 0);
+	int j, i, ctr;
+	int y = 0;
+	/*if (in == -1) {
+		printf("unable to open file");
+		return 1;
+	}*/
+
+	char* map = mmap(0, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, in, 0);
 	if (map == MAP_FAILED)
 	{
-		printf("error mmap function");
-		exit(-1);
+		printf("error calling mmap function");
+		return 1;
 	}
+
 	j = params(map, size); //numbers of lines
 	char** sort = (char**)malloc(j * sizeof(char*));
 	j = max_length(map, size);
@@ -116,7 +119,7 @@ int main(int argc, char* argv[])
 	}
 	ctr = i;
 	qsort(sort, ctr, sizeof(char*), scmp);
-	
+
 	for (i = 0; i < ctr; i++)
 	{
 		char* wow = sort[i];
@@ -157,7 +160,7 @@ int main(int argc, char* argv[])
 	}
 	_write(out, sort_map, y);
 	free(sort_map);
-	free(sort);	
+	free(sort);
 	munmap(map, size);
 	_close(in);
 	_close(out);
