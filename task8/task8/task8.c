@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <Windows.h>
+#include < math.h >
+#include <time.h>
+#define PI 3.141592
 
 typedef unsigned short us;
 typedef unsigned int ui;
@@ -223,7 +226,7 @@ void createGauss5x5(RGB** rgb, RGB** newSet, int x, int y)
 	const int matrix5x5[5][5] = { {1, 4,  6,  4,  1}, {4, 16, 24, 16, 4}, {6, 24, 36, 24, 6}, {4, 16, 24, 16, 4}, {1, 4,  6,  4,  1} };
 	int pop = 256;
 	int green = 0, blue = 0, red = 0;
-	
+
 	for (int i = 0; i < 5 * 5; i++)
 	{
 		RGB* pix = &rgb[y - 2 + i / 5][x - 2 + i % 5];
@@ -248,6 +251,7 @@ void gaussFilter5x5(RGB** rgb, RGB** newSet, int height, int width)
 		}
 	}
 }
+
 
 void createSobelX(RGB** rgb, RGB** newSet, int x, int y)
 {
@@ -341,9 +345,47 @@ void greyFilter(RGB** rgb, RGB** newSet, int height, int width)
 	}
 }
 
+void gaborFilter(RGB** rgb, RGB** newSet,  int height, int width, double begin)
+{
+	double end = clock();
+	double theta = (double)((end - begin) / CLOCKS_PER_SEC);
+	double f = theta;
+	double sum1, sum2, sum3;
+	int i, j, wx = 13, wy = 13, u, v;
+	double sigma_x = 0.04, sigma_y = 0.04, x, y;
+	double G;
+	for (i = wy/2; i < height - wy / 2; i++)
+	{
+		for (j = wx / 2; j < width - wx / 2; j++)
+		{
+			sum1 = 0; sum2 = 0; sum3 = 0;
+			for (u = 0; u < wy; u++)
+			{
+				for (v = 0; v < wx; v++)
+				{
+					x = v * cos(theta) + u * sin(theta);
+					y = -v * sin(theta) + u * cos(theta);
+					x = x * x;
+					y = y * y;
+					G = exp(-0.5 * ((x / sigma_x) + (x / sigma_y))) * cos(2 * PI * f * x);
+					sum1 += G * (double)rgb[i - wy / 2 + u][j - wx / 2 + v].rgbBlue;
+					sum2 += G * (double)rgb[i - wy / 2 + u][j - wx / 2 + v].rgbGreen;
+					sum3 += G * (double)rgb[i - wy / 2 + u][j - wx / 2 + v].rgbRed;
+				}
+			}
+			/*sum1 = (int)sum1;   //????? 
+			sum2 = (int)sum2;
+			sum3 = (int)sum3;*/
+			newSet[i][j].rgbBlue = (uc)sum1;
+			newSet[i][j].rgbGreen = (uc)sum2;
+			newSet[i][j].rgbRed = (uc)sum3;
+		}
+	}
+}
 
 int main(int argc, char* argv[])
 {
+	double begin = clock();
 	FILE* input;
 	FILE* output;
 	if (argc != 4)
@@ -413,6 +455,13 @@ int main(int argc, char* argv[])
 		record(newSet, vect, bmpHeader, bmpInfo, output, palette, paletteSize);
 		cleaning(&rgb, &newSet, &bmpHeader, &bmpInfo);
 
+	}
+	else if (strcmp(argv[2], "gabor") == 0)
+	{
+		RGB** newSet = copyBmp(rgb, bmpInfo->biHeight, bmpInfo->biWidth);
+		gaborFilter(rgb, newSet, bmpInfo->biHeight, bmpInfo->biWidth, begin);
+		record(newSet, vect, bmpHeader, bmpInfo, output, palette, paletteSize);
+		cleaning(&rgb, &newSet, &bmpHeader, &bmpInfo);
 	}
 	else
 	{
