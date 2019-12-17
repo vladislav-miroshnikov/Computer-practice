@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.c">
+    <ClCompile Include="task9.c">
       <Filter>Файлы ресурсов</Filter>
     </ClCompile>
     <ClCompile Include="allocator.c">

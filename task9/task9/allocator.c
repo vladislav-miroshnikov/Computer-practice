@@ -1,4 +1,3 @@
-﻿#include <stdio.h>
 #include "allocator.h"
 
 typedef unsigned char uc;
@@ -11,7 +10,7 @@ typedef struct forMemory
 forMemory* find(size_t size);
 forMemory* memoryList;
 const size_t sizeM = 1024;  //const of max memory size, you can change this setting depending on the task 
-void* memorySize = 0;    
+void* memorySize = 0;
 
 forMemory* find(size_t size)
 {
@@ -22,7 +21,7 @@ forMemory* find(size_t size)
 	}
 	return array;
 }
-    
+
 void init()
 {
 	if (memorySize)
@@ -37,7 +36,7 @@ void init()
 	}
 	memoryList = (forMemory*)memorySize;
 	memoryList->size = sizeM;
-	memoryList->nextNode = 0; 
+	memoryList->nextNode = 0;
 	memoryList->previousNode = memoryList->nextNode;
 }
 
