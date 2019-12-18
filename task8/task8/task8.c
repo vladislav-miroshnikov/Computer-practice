@@ -104,17 +104,17 @@ RGB** processingBmp(BITMAPFILEHEADER* bmpHeader, BITMAPINFOHEADER* bmpInfo, FILE
 
 RGB** copyBmp(RGB** rgb, int height, int width)
 {
-	RGB** newSet = calloc(sizeof(RGB*), height);
+	RGB** newRgb = calloc(sizeof(RGB*), height);
 	for (int i = 0; i < height; i++)
 	{
-		newSet[i] = calloc(sizeof(RGB*), width);
-		memcpy(newSet[i], rgb[i], sizeof(RGB) * width);
+		newRgb[i] = calloc(sizeof(RGB*), width);
+		memcpy(newRgb[i], rgb[i], sizeof(RGB) * width);
 	}
-	return newSet;
+	return newRgb;
 }
 
 //function of record bmp into new file
-void record(RGB** newSet, int vect, BITMAPFILEHEADER* bmpHeader, BITMAPINFOHEADER* bmpInfo, FILE* output, char palette, ul paletteSize)
+void record(RGB** newRgb, int vect, BITMAPFILEHEADER* bmpHeader, BITMAPINFOHEADER* bmpInfo, FILE* output, char palette, ul paletteSize)
 {
 	fwrite(bmpHeader, sizeof(BITMAPFILEHEADER), 1, output);
 	fwrite(bmpInfo, sizeof(BITMAPINFOHEADER), 1, output);
@@ -128,7 +128,7 @@ void record(RGB** newSet, int vect, BITMAPFILEHEADER* bmpHeader, BITMAPINFOHEADE
 	{
 		for (int j = 0; j < bmpInfo->biWidth; j++)
 		{
-			fwrite(&newSet[i][j], sizeof(RGB), 1, output);
+			fwrite(&newRgb[i][j], sizeof(RGB), 1, output);
 			if (bmpInfo->biBitCount == 32)
 			{
 				putc(0, output);
@@ -146,12 +146,12 @@ void record(RGB** newSet, int vect, BITMAPFILEHEADER* bmpHeader, BITMAPINFOHEADE
 
 //function of memory cleaning
 
-void cleaning(RGB*** rgb, RGB*** newSet, BITMAPFILEHEADER** bmpHeader, BITMAPINFOHEADER** bmpInfo)
+void cleaning(RGB*** rgb, RGB*** newRgb, BITMAPFILEHEADER** bmpHeader, BITMAPINFOHEADER** bmpInfo)
 {
 	free(*bmpHeader);
 	free(*bmpInfo);
 	int a = strlen(*rgb);
-	int b = strlen(*newSet);
+	int b = strlen(*newRgb);
 	for (int i = 0; i < a; i++)
 	{
 		free(*rgb[i]);
@@ -159,20 +159,20 @@ void cleaning(RGB*** rgb, RGB*** newSet, BITMAPFILEHEADER** bmpHeader, BITMAPINF
 	free(*rgb);
 	for (int i = 0; i < b; i++)
 	{
-		free(*newSet[i]);
+		free(*newRgb[i]);
 	}
-	free(*newSet);
+	free(*newRgb);
 }
 
 // filters are begin from here
 
-void convolution(RGB** rgb, double* gaborColor1, double* gaborColor2, double* gaborColor3, int number, double theta, double f, int i, int j, ui* color1, ui* color2, ui* color3, int matrix[3][3])
+void convolution(RGB** rgb, double* gaborColor1, double* gaborColor2, double* gaborColor3, int number, double f, double theta, int i, int j, ui* color1, ui* color2, ui* color3, const int* matrix)
 {
 	int u, v;
-	if (number == 1)
+	if (number == 1) //gabor filter
 	{
 		double sigma_x = 0.04, sigma_y = 0.04, x, y;
-		double G;
+		double gaborMatrix[13][13];
 		int wx = 13, wy = 13;
 		for (u = 0; u < wy; u++)
 		{
@@ -182,85 +182,119 @@ void convolution(RGB** rgb, double* gaborColor1, double* gaborColor2, double* ga
 				y = -v * sin(theta) + u * cos(theta);
 				x = x * x;
 				y = y * y;
-				G = exp(-0.5 * ((x / sigma_x) + (x / sigma_y))) * cos(2 * PI * f * x);
-				*gaborColor1 += G * (double)rgb[i - wy / 2 + u][j - wx / 2 + v].rgbBlue;
-				*gaborColor2 += G * (double)rgb[i - wy / 2 + u][j - wx / 2 + v].rgbGreen;
-				*gaborColor3 += G * (double)rgb[i - wy / 2 + u][j - wx / 2 + v].rgbRed;
+				gaborMatrix[u][v] = exp(-0.5 * ((x / sigma_x) + (x / sigma_y))) * cos(2 * PI * f * x);
+				*gaborColor1 += gaborMatrix[u][v] * (double)rgb[i - wy / 2 + u][j - wx / 2 + v].rgbBlue;
+				*gaborColor2 += gaborMatrix[u][v] * (double)rgb[i - wy / 2 + u][j - wx / 2 + v].rgbGreen;
+				*gaborColor3 += gaborMatrix[u][v]* (double)rgb[i - wy / 2 + u][j - wx / 2 + v].rgbRed;
 			}
 		}
 	}
-	else if (number == 2)
+	else if (number == 2) // grey filter
 	{
 		*color1 = ((rgb[i][j].rgbGreen + rgb[i][j].rgbBlue + rgb[i][j].rgbRed) / 3);
 	}
-	else
+	else if (number == 3) //average filter
 	{
 		for (u = -1; u < 2; u++)
 		{
 			for (v = -1; v < 2; v++)
 			{
-				if (number == 3)
-				{
-					*color1 += rgb[i + u][j + v].rgbRed;
-					*color2 += rgb[i + u][j + v].rgbGreen;
-					*color3 += rgb[i + u][j + v].rgbBlue;
-				}
-				else 
-				{
-					*color1 += rgb[i + u][j + v].rgbRed * matrix[u + 1][v + 1];
-					*color2 += rgb[i + u][j + v].rgbGreen * matrix[u + 1][v + 1];
-					*color3 += rgb[i + u][j + v].rgbBlue * matrix[u + 1][v + 1];
-				}
+				*color1 += rgb[i + u][j + v].rgbRed;
+				*color2 += rgb[i + u][j + v].rgbGreen;
+				*color3 += rgb[i + u][j + v].rgbBlue;
+				
 			}
 		}
 	}
-		
+	else //gausses and sobels filters
+	{
+		int c = (int)f;
+		int stride = (int)theta;
+		for (u = 0; u < c * c; u++)
+		{
+			RGB* pix = &rgb[i - stride + u / c][j - stride + u % c];
+			*color1 += pix->rgbRed * matrix[u];
+			*color2 += pix->rgbGreen * matrix[u];
+			*color3 += pix->rgbBlue * matrix[u];
+		}
+	}
+
+			
 }
 
-void averageFilter(RGB** rgb, RGB** newSet, int height, int width)
+void averageFilter(RGB** rgb, RGB** newRgb, int height, int width)
 {
 	for (int i = 1; i < height - 1; i++)
 	{
 		for (int j = 1; j < width - 1; j++)
 		{
 			ui green = 0, blue = 0, red = 0;
-			convolution(rgb, NULL, NULL, NULL, 3, 0, 0, i, j, &red, &green, &blue, NULL);
-			newSet[i][j].rgbRed = (uc)(red / 9);
-			newSet[i][j].rgbGreen = (uc)(green / 9);
-			newSet[i][j].rgbBlue = (uc)(blue / 9);
+			convolution(rgb, NULL, NULL, NULL, 3, 0, 0, i, j, &red, &green, &blue, NULL, NULL);
+			newRgb[i][j].rgbRed = (uc)(red / 9);
+			newRgb[i][j].rgbGreen = (uc)(green / 9);
+			newRgb[i][j].rgbBlue = (uc)(blue / 9);
 		}
 	}
 }
-
-void gaussFilter3x3(RGB** rgb, RGB** newSet, int height, int width)
+	
+void gaussFilter3x3(RGB** rgb, RGB** newRgb, int height, int width)
 {
 	ui i, j;
-	const int matrix3x3[3][3] = { {1, 2, 1}, {2, 4, 2}, {1, 2, 1} };
+	const int matrix3x3[9] = { 1, 2, 1, 2, 4, 2, 1, 2, 1 };
 	for (i = 1; i < height - 1; i++)
 	{
 		for (j = 1; j < width - 1; j++)
 		{
 			ui red = 0, green = 0, blue = 0;
 
-			convolution(rgb, NULL, NULL, NULL, 0, 0, 0, i, j, &red, &green, &blue, matrix3x3);
+			convolution(rgb, NULL, NULL, NULL, 0, 3, 1, i, j, &red, &green, &blue, matrix3x3);
 
-			newSet[i][j].rgbRed = (uc)(red / 16);
-			newSet[i][j].rgbGreen = (uc)(green / 16);
-			newSet[i][j].rgbBlue = (uc)(blue / 16);
+			newRgb[i][j].rgbRed = (uc)(red / 16);
+			newRgb[i][j].rgbGreen = (uc)(green / 16);
+			newRgb[i][j].rgbBlue = (uc)(blue / 16);
 		}
 	}
 }
 
-void sobelXFilter(RGB** rgb, RGB** newSet, int height, int width)
+void gaussFilter5x5(RGB** rgb, RGB** newRgb, int height, int width)
+{
+	
+	const int matrix5x5[25] =
+	{
+	1, 4, 6, 4, 1,
+	4, 16, 24, 16, 4,
+	6, 24, 36, 24, 6,
+	4, 16, 24, 16, 4,
+	1, 4, 6, 4, 1
+	};
+	for (int i = 2; i < height - 2; i++)
+	{
+		for (int j = 2; j < width - 2; j++)
+		{
+			
+			int pop = 256;
+			int green = 0, blue = 0, red = 0;
+
+			convolution(rgb, NULL, NULL, NULL, 0, 5, 2, i, j, &red, &green, &blue, matrix5x5);
+
+			newRgb[i][j].rgbRed = (uc)(red / pop);
+			newRgb[i][j].rgbBlue = (uc)(blue / pop);
+			newRgb[i][j].rgbGreen = (uc)(green / pop);
+		}
+	}
+}
+
+
+void sobelXFilter(RGB** rgb, RGB** newRgb, int height, int width)
 {
 	for (int i = 1; i < height - 1; i++)
 	{
 		for (int j = 1; j < width - 1; j++)
 		{
-			const int matrix3x3[3][3] = { {1,  2,  1}, {0,  0,  0}, {-1, -2, -1} };
+			const int matrix3x3[9] = { 1,  2,  1, 0,  0,  0, -1, -2, -1 };
 			int green = 0, blue = 0, red = 0;
 
-			convolution(rgb, NULL, NULL, NULL, 0, 0, 0, i, j, &red, &green, &blue, matrix3x3);
+			convolution(rgb, NULL, NULL, NULL, 0, 3, 1, i, j, &red, &green, &blue, matrix3x3);
 			if (red < 0) red = 0;
 			if (blue < 0) blue = 0;
 			if (green < 0) green = 0;
@@ -269,23 +303,23 @@ void sobelXFilter(RGB** rgb, RGB** newSet, int height, int width)
 			if (green > 255) green = 255;
 			if (red > 255) red = 255;
 
-			newSet[i][j].rgbRed = (uc)(red);
-			newSet[i][j].rgbBlue = (uc)(blue);
-			newSet[i][j].rgbGreen = (uc)(green);
+			newRgb[i][j].rgbRed = (uc)(red);
+			newRgb[i][j].rgbBlue = (uc)(blue);
+			newRgb[i][j].rgbGreen = (uc)(green);
 		}
 	}
 }
 
-void sobelYFilter(RGB** rgb, RGB** newSet, int height, int width)
+void sobelYFilter(RGB** rgb, RGB** newRgb, int height, int width)
 {
 	for (int i = 1; i < height - 3; i++)
 	{
 		for (int j = 1; j < width - 3; j++)
 		{
-			const int matrix3x3[3][3] = { {-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1} };
+			const int matrix3x3[9] = { -1, 0, 1, -2, 0, 2, -1, 0, 1 };
 			int green = 0, blue = 0, red = 0;
 
-			convolution(rgb, NULL, NULL, NULL, 0, 0, 0, i, j, &red, &green, &blue, matrix3x3);
+			convolution(rgb, NULL, NULL, NULL, 0, 3, 1, i, j, &red, &green, &blue, matrix3x3);
 
 			if (red < 0) red = 0;
 			if (blue < 0) blue = 0;
@@ -295,29 +329,29 @@ void sobelYFilter(RGB** rgb, RGB** newSet, int height, int width)
 			if (green > 255) green = 255;
 			if (red > 255) red = 255;
 
-			newSet[i][j].rgbRed = (uc)(red);
-			newSet[i][j].rgbBlue = (uc)(blue);
-			newSet[i][j].rgbGreen = (uc)(green);
+			newRgb[i][j].rgbRed = (uc)(red);
+			newRgb[i][j].rgbBlue = (uc)(blue);
+			newRgb[i][j].rgbGreen = (uc)(green);
 		}
 	}
 }
 
-void greyFilter(RGB** rgb, RGB** newSet, int height, int width)
+void greyFilter(RGB** rgb, RGB** newRgb, int height, int width)
 {
 	for (int i = 0; i < height; i++)
 	{
 		for (int j = 0; j < width; j++)
 		{
 			ui color;
-			convolution(rgb, NULL, NULL, NULL, 2, 0, 0, i, j, &color, NULL, NULL, NULL);
-			newSet[i][j].rgbBlue = (uc)color;
-			newSet[i][j].rgbGreen = (uc)color;
-			newSet[i][j].rgbRed = (uc)color;
+			convolution(rgb, NULL, NULL, NULL, 2, 0, 0, i, j, &color, NULL, NULL, NULL, NULL);
+			newRgb[i][j].rgbBlue = (uc)color;
+			newRgb[i][j].rgbGreen = (uc)color;
+			newRgb[i][j].rgbRed = (uc)color;
 		}
 	}
 }
 
-void gaborFilter(RGB** rgb, RGB** newSet, int height, int width, double begin)
+void gaborFilter(RGB** rgb, RGB** newRgb, int height, int width, double begin)
 {
 	double end = clock();
 	double theta = (double)((end - begin) / CLOCKS_PER_SEC);
@@ -329,10 +363,10 @@ void gaborFilter(RGB** rgb, RGB** newSet, int height, int width, double begin)
 		for (j = wx / 2; j < width - wx / 2; j++)
 		{
 			sum1 = 0; sum2 = 0; sum3 = 0;
-			convolution(rgb, &sum1, &sum2, &sum3, 1, theta, f, i, j, NULL, NULL, NULL, NULL);
-			newSet[i][j].rgbBlue = (uc)sum1;
-			newSet[i][j].rgbGreen = (uc)sum2;
-			newSet[i][j].rgbRed = (uc)sum3;
+			convolution(rgb, &sum1, &sum2, &sum3, 1, theta, f, i, j, NULL, NULL, NULL, NULL, NULL);
+			newRgb[i][j].rgbBlue = (uc)sum1;
+			newRgb[i][j].rgbGreen = (uc)sum2;
+			newRgb[i][j].rgbRed = (uc)sum3;
 		}
 	}
 }
@@ -361,38 +395,42 @@ int main(int argc, char* argv[])
 		fclose(output);
 		exit(-1);
 	}
-
+	//system("chcp 1251");
 	int vect;
 	char* palette;
 	ul paletteSize;
 	BITMAPFILEHEADER* bmpHeader = malloc(sizeof(BITMAPFILEHEADER));
 	BITMAPINFOHEADER* bmpInfo = malloc(sizeof(BITMAPINFOHEADER));
 	RGB** rgb = processingBmp(bmpHeader, bmpInfo, input, &vect, &palette, &paletteSize);
-	RGB** newSet = copyBmp(rgb, bmpInfo->biHeight, bmpInfo->biWidth);
+	RGB** newRgb = copyBmp(rgb, bmpInfo->biHeight, bmpInfo->biWidth);
 	if (strcmp(argv[2], "average") == 0)
 	{
-		averageFilter(rgb, newSet, bmpInfo->biHeight, bmpInfo->biWidth);
+		averageFilter(rgb, newRgb, bmpInfo->biHeight, bmpInfo->biWidth);
 	}
-	else if (strcmp(argv[2], "gauss3") == 0)
+	else if (strcmp(argv[2], "gauss3x3") == 0)
 	{
-		gaussFilter3x3(rgb, newSet, bmpInfo->biHeight, bmpInfo->biWidth);
+		gaussFilter3x3(rgb, newRgb, bmpInfo->biHeight, bmpInfo->biWidth);
+	}
+	else if (strcmp(argv[2], "gauss5x5") == 0)
+	{
+		gaussFilter5x5(rgb, newRgb, bmpInfo->biHeight, bmpInfo->biWidth);
 	}
 	else if (strcmp(argv[2], "sobelX") == 0)
 	{
-		sobelXFilter(rgb, newSet, bmpInfo->biHeight, bmpInfo->biWidth);
+		sobelXFilter(rgb, newRgb, bmpInfo->biHeight, bmpInfo->biWidth);
 	}
 	else if (strcmp(argv[2], "sobelY") == 0)
 	{
-		sobelYFilter(rgb, newSet, bmpInfo->biHeight, bmpInfo->biWidth);
+		sobelYFilter(rgb, newRgb, bmpInfo->biHeight, bmpInfo->biWidth);
 	}
 	else if (strcmp(argv[2], "grey") == 0)
 	{
-		greyFilter(rgb, newSet, bmpInfo->biHeight, bmpInfo->biWidth);
+		greyFilter(rgb, newRgb, bmpInfo->biHeight, bmpInfo->biWidth);
 
 	}
 	else if (strcmp(argv[2], "gabor") == 0)
 	{
-		gaborFilter(rgb, newSet, bmpInfo->biHeight, bmpInfo->biWidth, begin);
+		gaborFilter(rgb, newRgb, bmpInfo->biHeight, bmpInfo->biWidth, begin);
 	}
 	else
 	{
@@ -401,7 +439,7 @@ int main(int argc, char* argv[])
 		fclose(output);
 		exit(-1);
 	}
-	record(newSet, vect, bmpHeader, bmpInfo, output, palette, paletteSize);
-	cleaning(&rgb, &newSet, &bmpHeader, &bmpInfo);
+	record(newRgb, vect, bmpHeader, bmpInfo, output, palette, paletteSize);
+	cleaning(&rgb, &newRgb, &bmpHeader, &bmpInfo);
 	return 0;
 }
