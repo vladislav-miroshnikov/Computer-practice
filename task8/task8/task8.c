@@ -166,26 +166,21 @@ void cleaning(RGB*** rgb, RGB*** newRgb, BITMAPFILEHEADER** bmpHeader, BITMAPINF
 
 // filters are begin from here
 
-void convolution(RGB** rgb, double* gaborColor1, double* gaborColor2, double* gaborColor3, int number, double f, double theta, int i, int j, ui* color1, ui* color2, ui* color3, const int* matrix)
+void convolution(RGB** rgb, double* gaborColor1, double* gaborColor2, double* gaborColor3, int number, double f, double theta, int i, int j, ui* color1, ui* color2, ui* color3, const int* matrix, double* gaborMatrix)
 {
 	int u, v;
 	if (number == 1) //gabor filter
 	{
-		double sigma_x = 0.04, sigma_y = 0.04, x, y;
-		double gaborMatrix[13][13];
-		int wx = 13, wy = 13;
-		for (u = 0; u < wy; u++)
+		int w = 13;
+		int q = 0;
+		for (u = 0; u < w; u++)
 		{
-			for (v = 0; v < wx; v++)
+			for (v = 0; v < w; v++)
 			{
-				x = v * cos(theta) + u * sin(theta);
-				y = -v * sin(theta) + u * cos(theta);
-				x = x * x;
-				y = y * y;
-				gaborMatrix[u][v] = exp(-0.5 * ((x / sigma_x) + (x / sigma_y))) * cos(2 * PI * f * x);
-				*gaborColor1 += gaborMatrix[u][v] * (double)rgb[i - wy / 2 + u][j - wx / 2 + v].rgbBlue;
-				*gaborColor2 += gaborMatrix[u][v] * (double)rgb[i - wy / 2 + u][j - wx / 2 + v].rgbGreen;
-				*gaborColor3 += gaborMatrix[u][v]* (double)rgb[i - wy / 2 + u][j - wx / 2 + v].rgbRed;
+				*gaborColor1 += gaborMatrix[q] * (double)rgb[i - w / 2 + u][j - w / 2 + v].rgbBlue;
+				*gaborColor2 += gaborMatrix[q] * (double)rgb[i - w / 2 + u][j - w / 2 + v].rgbGreen;
+				*gaborColor3 += gaborMatrix[q] * (double)rgb[i - w / 2 + u][j - w / 2 + v].rgbRed;
+				q++;
 			}
 		}
 	}
@@ -218,7 +213,6 @@ void convolution(RGB** rgb, double* gaborColor1, double* gaborColor2, double* ga
 			*color3 += pix->rgbBlue * matrix[u];
 		}
 	}
-
 			
 }
 
@@ -229,7 +223,7 @@ void averageFilter(RGB** rgb, RGB** newRgb, int height, int width)
 		for (int j = 1; j < width - 1; j++)
 		{
 			ui green = 0, blue = 0, red = 0;
-			convolution(rgb, NULL, NULL, NULL, 3, 0, 0, i, j, &red, &green, &blue, NULL, NULL);
+			convolution(rgb, NULL, NULL, NULL, 3, 0, 0, i, j, &red, &green, &blue, NULL, NULL, NULL);
 			newRgb[i][j].rgbRed = (uc)(red / 9);
 			newRgb[i][j].rgbGreen = (uc)(green / 9);
 			newRgb[i][j].rgbBlue = (uc)(blue / 9);
@@ -247,7 +241,7 @@ void gaussFilter3x3(RGB** rgb, RGB** newRgb, int height, int width)
 		{
 			ui red = 0, green = 0, blue = 0;
 
-			convolution(rgb, NULL, NULL, NULL, 0, 3, 1, i, j, &red, &green, &blue, matrix3x3);
+			convolution(rgb, NULL, NULL, NULL, 0, 3, 1, i, j, &red, &green, &blue, matrix3x3, NULL);
 
 			newRgb[i][j].rgbRed = (uc)(red / 16);
 			newRgb[i][j].rgbGreen = (uc)(green / 16);
@@ -275,7 +269,7 @@ void gaussFilter5x5(RGB** rgb, RGB** newRgb, int height, int width)
 			int pop = 256;
 			int green = 0, blue = 0, red = 0;
 
-			convolution(rgb, NULL, NULL, NULL, 0, 5, 2, i, j, &red, &green, &blue, matrix5x5);
+			convolution(rgb, NULL, NULL, NULL, 0, 5, 2, i, j, &red, &green, &blue, matrix5x5, NULL);
 
 			newRgb[i][j].rgbRed = (uc)(red / pop);
 			newRgb[i][j].rgbBlue = (uc)(blue / pop);
@@ -294,7 +288,7 @@ void sobelXFilter(RGB** rgb, RGB** newRgb, int height, int width)
 			const int matrix3x3[9] = { 1,  2,  1, 0,  0,  0, -1, -2, -1 };
 			int green = 0, blue = 0, red = 0;
 
-			convolution(rgb, NULL, NULL, NULL, 0, 3, 1, i, j, &red, &green, &blue, matrix3x3);
+			convolution(rgb, NULL, NULL, NULL, 0, 3, 1, i, j, &red, &green, &blue, matrix3x3, NULL);
 			if (red < 0) red = 0;
 			if (blue < 0) blue = 0;
 			if (green < 0) green = 0;
@@ -319,7 +313,7 @@ void sobelYFilter(RGB** rgb, RGB** newRgb, int height, int width)
 			const int matrix3x3[9] = { -1, 0, 1, -2, 0, 2, -1, 0, 1 };
 			int green = 0, blue = 0, red = 0;
 
-			convolution(rgb, NULL, NULL, NULL, 0, 3, 1, i, j, &red, &green, &blue, matrix3x3);
+			convolution(rgb, NULL, NULL, NULL, 0, 3, 1, i, j, &red, &green, &blue, matrix3x3, NULL);
 
 			if (red < 0) red = 0;
 			if (blue < 0) blue = 0;
@@ -343,7 +337,7 @@ void greyFilter(RGB** rgb, RGB** newRgb, int height, int width)
 		for (int j = 0; j < width; j++)
 		{
 			ui color;
-			convolution(rgb, NULL, NULL, NULL, 2, 0, 0, i, j, &color, NULL, NULL, NULL, NULL);
+			convolution(rgb, NULL, NULL, NULL, 2, 0, 0, i, j, &color, NULL, NULL, NULL, NULL, NULL);
 			newRgb[i][j].rgbBlue = (uc)color;
 			newRgb[i][j].rgbGreen = (uc)color;
 			newRgb[i][j].rgbRed = (uc)color;
@@ -358,12 +352,30 @@ void gaborFilter(RGB** rgb, RGB** newRgb, int height, int width, double begin)
 	double f = theta;
 	double sum1, sum2, sum3;
 	int i, j, wx = 13, wy = 13, u, v;
+	double sigma_x = 0.04, sigma_y = 0.04, x, y;
+	double auxiliaryMatrix[13][13];
+	double gaborMatrix[169];
+	int q = 0;
+	for (u = 0; u < wy; u++)  //I use an additional two - dimensional array, then I translate it into one - dimensional
+	{
+		for (v = 0; v < wx; v++)
+		{	
+			x = v * cos(theta) + u * sin(theta);
+			y = -v * sin(theta) + u * cos(theta);
+			x = x * x;
+			y = y * y;
+			auxiliaryMatrix[u][v] = exp(-0.5 * ((x / sigma_x) + (x / sigma_y))) * cos(2 * PI * f * x);
+			gaborMatrix[q] = auxiliaryMatrix[u][v];
+			q++;
+		}
+	}
+	//I send a one-dimensional array of type double to the function in the same way as with other filters
 	for (i = wy / 2; i < height - wy / 2; i++)
 	{
 		for (j = wx / 2; j < width - wx / 2; j++)
 		{
 			sum1 = 0; sum2 = 0; sum3 = 0;
-			convolution(rgb, &sum1, &sum2, &sum3, 1, theta, f, i, j, NULL, NULL, NULL, NULL, NULL);
+			convolution(rgb, &sum1, &sum2, &sum3, 1, f, theta, i, j, NULL, NULL, NULL, NULL, gaborMatrix);
 			newRgb[i][j].rgbBlue = (uc)sum1;
 			newRgb[i][j].rgbGreen = (uc)sum2;
 			newRgb[i][j].rgbRed = (uc)sum3;
