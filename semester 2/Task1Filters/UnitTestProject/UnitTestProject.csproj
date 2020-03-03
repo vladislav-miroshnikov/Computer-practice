@@ -5,11 +5,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A5921E3A-37BC-4982-BDCD-ED5566BFBD78}</ProjectGuid>
+    <ProjectGuid>{F8F5B280-DCAD-455A-AFC8-A2344256794A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>task1.test</RootNamespace>
-    <AssemblyName>task1.test</AssemblyName>
+    <RootNamespace>UnitTestProject</RootNamespace>
+    <AssemblyName>UnitTestProject</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -50,31 +50,31 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Resource1.Designer.cs">
+    <Compile Include="Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Resource1.resx</DependentUpon>
+      <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="UnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\task1\task1.csproj">
-      <Project>{d0ca5eb7-a4de-4a77-8a38-a26ea66fa8d5}</Project>
-      <Name>task1</Name>
+    <ProjectReference Include="..\Task1Filters\Task1Filters.csproj">
+      <Project>{6d5af827-3c55-4fa3-9ab9-15b8673ca4f1}</Project>
+      <Name>Task1Filters</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resource1.resx">
+    <EmbeddedResource Include="Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\gauss5.bmp" />
+    <None Include="Resources\average.bmp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\grey.bmp" />
@@ -86,13 +86,13 @@
     <None Include="Resources\sobelX.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\average.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\gauss3.bmp" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\sobelY.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gauss3x.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gauss5x.bmp" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

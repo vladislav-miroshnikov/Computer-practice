@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace task1
+namespace Task1Filters
 {
     public struct RGB
     {
@@ -38,8 +38,8 @@ namespace task1
         private BITMAPFILEHEADER bitFile;
         private BITMAPINFOHEADER bitInfo;
         private int vect;
-        public static RGB[,] pixels { get; set; }
-        public static RGB[,] newPixels { get; set; }
+        public RGB[,] pixels { get; set; }
+        public RGB[,] newPixels { get; set; }
         public void Reading(FileStream input)
         {
             BinaryReader reader = new BinaryReader(input);
@@ -48,7 +48,7 @@ namespace task1
             bitFile.Reserved1 = reader.ReadUInt16();
             bitFile.Reserved2 = reader.ReadUInt16();
             bitFile.OffBits = reader.ReadUInt32();
-            
+
             bitInfo.Size = reader.ReadUInt32();
             bitInfo.Width = reader.ReadUInt32();
             bitInfo.Height = reader.ReadUInt32();
@@ -85,7 +85,7 @@ namespace task1
                 }
             }
         }
-      
+
         public void Writing(FileStream output)
         {
             BinaryWriter writer = new BinaryWriter(output);
@@ -106,9 +106,9 @@ namespace task1
             writer.Write(bitInfo.ClrUsed);
             writer.Write(bitInfo.ClrImportant);
 
-            for (var i = 0; i < bitInfo.Height; i++) 
+            for (var i = 0; i < bitInfo.Height; i++)
             {
-                for (var j = 0; j < bitInfo.Width; j++) 
+                for (var j = 0; j < bitInfo.Width; j++)
                 {
                     writer.Write(newPixels[i, j].rgbRed);
                     writer.Write(newPixels[i, j].rgbGreen);
@@ -125,7 +125,7 @@ namespace task1
 
             }
         }
-        
+
         public uint ReturnHeight()
         {
             return bitInfo.Height;
@@ -134,7 +134,6 @@ namespace task1
         public uint ReturnWidth()
         {
             return bitInfo.Width;
-        } 
-
+        }
     }
 }

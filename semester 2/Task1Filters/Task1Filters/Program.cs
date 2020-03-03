@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 
-namespace task1
+namespace Task1Filters
 {
     class Program
-    {       
+    {
         static void Main(string[] args)
         {
             if (args.Length != 3)
@@ -19,27 +19,27 @@ namespace task1
             string filterName = args[1];
             uint height = bmp.ReturnHeight();
             uint width = bmp.ReturnWidth();
-            Picture.newPixels = new RGB[height, width];
+            bmp.newPixels = new RGB[height, width];
 
             switch (filterName)
             {
                 case "grey":
-                    Filters.Grey(height, width);
+                    Filters.Grey(bmp.pixels, bmp.newPixels, height, width);
                     break;
                 case "average":
-                    Filters.Average(height, width);
+                    Filters.Average(bmp.pixels, bmp.newPixels, height, width);
                     break;
                 case "gauss3x3":
-                    Filters.Gauss3x3(height, width);
+                    Filters.Gauss3x3Filter(bmp.pixels, bmp.newPixels, height, width);
                     break;
                 case "gauss5x5":
-                    Filters.Gauss5x5(height, width);
+                    Filters.Gauss5x5Filter(bmp.pixels, bmp.newPixels, height, width);
                     break;
                 case "sobelX":
-                    Filters.Sobel(height, width, 0);
+                    Filters.Sobel(bmp.pixels, bmp.newPixels, height, width, 0);
                     break;
                 case "sobelY":
-                    Filters.Sobel(height, width, 1);
+                    Filters.Sobel(bmp.pixels, bmp.newPixels, height, width, 1);
                     break;
                 default:
                     throw new ArgumentException("check name of filter!");
@@ -49,7 +49,6 @@ namespace task1
             FileStream output = new FileStream(args[2], FileMode.Create);
             bmp.Writing(output);
             output.Close();
-            
         }
     }
 }
