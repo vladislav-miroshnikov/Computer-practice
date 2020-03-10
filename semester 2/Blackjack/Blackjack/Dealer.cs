@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Blackjack
+﻿namespace Blackjack
 {
     class Dealer : AbstractMan
     {    

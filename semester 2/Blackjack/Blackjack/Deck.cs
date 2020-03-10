@@ -5,39 +5,38 @@ namespace Blackjack
 {
     public class Deck
     {
-        public static List<Cards> cards;
+        public static List<Cards> cards { get; set; }
         private Random rand = new Random();
+
         public void CreateCards()
         {
-            cards = new List<Cards>();
-            int i = 0;
+            cards = new List<Cards>();         
             for (int j = 0; j < 8; j++) 
             {
 
                 foreach (int s in Cards.values)
                 {
-                    cards.Add(new Cards(Cards.Suits.Hearts, s));
-                    i++;
+                    cards.Add(new Cards(Cards.Suits.Hearts, s));               
                 }
 
                 foreach (int s in Cards.values)
                 {
                     cards.Add(new Cards(Cards.Suits.Diamonds, s));
-                    i++;
+                    
 
                 }
 
                 foreach (int s in Cards.values)
                 {
                     cards.Add(new Cards(Cards.Suits.Spades, s));
-                    i++;
+                   
 
                 }
 
                 foreach (int s in Cards.values)
                 {
                     cards.Add(new Cards(Cards.Suits.Clubs, s));
-                    i++;
+                   
                 }
                 
             }

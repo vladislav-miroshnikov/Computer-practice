@@ -8,13 +8,13 @@ namespace Blackjack.Tests
         [TestMethod]
         public void BlackjackTest()
         {
-            BotFisrt bot1 = new BotFisrt(1000, 0);
-            BotSecond bot2 = new BotSecond(1000, 0);
+            BotFisrt botFirst = new BotFisrt(1000, 0);
+            BotSecond botSecond = new BotSecond(1000, 0);
             Deck myDeck = new Deck();
             myDeck.CreateCards();
-            myDeck.Game(bot1, bot2);
-            bot1.Info();  //вывод в доп сведения
-            bot2.Info();
+            myDeck.Game(botFirst, botSecond);
+            botFirst.Info();  
+            botSecond.Info();
         }
     }
 }
