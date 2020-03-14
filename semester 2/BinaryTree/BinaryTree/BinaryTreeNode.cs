@@ -20,7 +20,7 @@
         public BinaryTreeNode<T> rightNode { get; set; }
         public BinaryTreeNode<T> parentNode { get; set; }
       
-        public Side? nodeSide  //nullable value type
+        public Side? nodeSide  //nullable value type, determine the position
         {
             get
             {

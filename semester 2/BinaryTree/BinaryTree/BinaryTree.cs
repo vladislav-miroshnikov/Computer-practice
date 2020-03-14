@@ -48,9 +48,9 @@ namespace BinaryTree
             }
         }
 
-        public BinaryTreeNode<T> Add(int key, T data)
+        public void Add(int key, T data)
         {
-            return Add(new BinaryTreeNode<T>(key, data));
+            Add(new BinaryTreeNode<T>(key, data));
         }
 
         private BinaryTreeNode<T> FindNode(int key, BinaryTreeNode<T> startWithNode = null)
@@ -186,6 +186,5 @@ namespace BinaryTree
                 }
             }
         }
-
     }
 }
