@@ -38,7 +38,7 @@ namespace WeakReference
         public WeakBinaryTreeNode<T> rightNode { get; set; }
         public WeakBinaryTreeNode<T> parentNode { get; set; }
 
-        public Side? nodeSide  //nullable value type
+        public Side? nodeSide  //nullable value type, determine the position
         {
             get
             {

@@ -2,12 +2,13 @@
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WeakReference;
+
 namespace WeakReferenceUnitTest
 {
     [TestClass]
     public class WeakReferenceUnitTest
     {
-        public class TestClass
+        private class TestClass
         {
             private string name;
             public TestClass(string name)
