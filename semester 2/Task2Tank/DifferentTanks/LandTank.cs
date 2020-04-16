@@ -5,18 +5,19 @@ namespace DifferentTanks
 {
     public class LandTank : AbstractTank
     {
-        public int numberOfGuns { get; set; }
+        public int NumberOfGuns { get; private set; }
 
-        public LandTank(string _title, string _nation, int _yearOfIssue, int _crew, float _weight, float _gunCaliber, int _numberOfGuns)
-            : base(_title, _nation, _yearOfIssue, _crew, _weight, _gunCaliber)
+        public LandTank(string title, string nation, int yearOfIssue, int crew, float weight, float gunCaliber, int numberOfGuns)
+            : base(title, nation, yearOfIssue, crew, weight, gunCaliber)
         {
-            numberOfGuns = _numberOfGuns;
+            NumberOfGuns = numberOfGuns;
         }     
   
-        public override void GetInfo()
+        public override string GetInfo()
         {
-            base.GetInfo();
-            Console.WriteLine($"Number of Guns: {numberOfGuns}\n");
+            string a = base.GetInfo();
+            Console.WriteLine($"Number of Guns: {NumberOfGuns}\n");
+            return (a + $"\nNumber of Guns: {NumberOfGuns}\n");
         }
 
     }

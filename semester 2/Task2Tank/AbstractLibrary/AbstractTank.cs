@@ -4,27 +4,29 @@ namespace AbstractLibrary
 {
     public abstract class AbstractTank
     {
-        public string title { get; set; }
-        public string nation { get; set; }
-        public int yearOfIssue { get; set; }
-        public int crew { get; set; }
-        public float weight { get; set; }
-        public float gunCaliber { get; set; }
+        public string Title { get; protected set; }
+        public string Nation { get; protected set; }
+        public int YearOfIssue { get; protected set; }
+        public int Crew { get; protected set; }
+        public float Weight { get; protected set; }
+        public float GunCaliber { get; protected set; }
 
-        protected AbstractTank(string _title, string _nation, int _yearOfIssue, int _crew, float _weight, float _gunCaliber)
+        protected AbstractTank(string title, string nation, int yearOfIssue, int crew, float weight, float gunCaliber)
         {
-            title = _title;
-            nation = _nation;
-            yearOfIssue = _yearOfIssue;
-            crew = _crew;
-            weight = _weight;                               
-            gunCaliber = _gunCaliber;
+            Title = title;
+            Nation = nation;
+            YearOfIssue = yearOfIssue;
+            Crew = crew;
+            Weight = weight;                               
+            GunCaliber = gunCaliber;
         }
 
-        public virtual void GetInfo()
+        public virtual string GetInfo()
         {
-            Console.WriteLine($"Name of the tank: {title}\nCountry of origin: {nation}\nYear of issue: {yearOfIssue}\n" +
-                $"Crew: {crew} persons\nTank weight : {weight} tons\nGun caliber: {gunCaliber} mm");
+            string a = ($"Name of the tank: {Title}\nCountry of origin: {Nation}\nYear of issue: {YearOfIssue}\n" +
+                $"Crew: {Crew} persons\nTank weight : {Weight} tons\nGun caliber: {GunCaliber} mm");
+            Console.WriteLine(a);
+            return a;
         }
 
         

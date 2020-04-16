@@ -5,18 +5,19 @@ namespace DifferentTanks
 {
     public class MarineTank : AbstractTank
     {
-        public string feature { get; set; }
+        public string Feature { get; private set; }
 
-        public MarineTank(string _title, string _nation, int _yearOfIssue, int _crew, float _weight, float _gunCaliber, string _feature) 
-            : base(_title, _nation, _yearOfIssue, _crew, _weight, _gunCaliber)
+        public MarineTank(string title, string nation, int yearOfIssue, int crew, float weight, float gunCaliber, string feature) 
+            : base(title, nation, yearOfIssue, crew, weight, gunCaliber)
         {
-            feature = _feature;
+            Feature = feature;
         }
 
-        public override void GetInfo()
+        public override string GetInfo()
         {
-            base.GetInfo();
-            Console.WriteLine($"Feature is : {feature}\n");
+            string a = base.GetInfo();
+            Console.WriteLine($"Feature is: {Feature}\n");
+            return (a + $"\nFeature is: {Feature}\n");
         }
     }
 }
