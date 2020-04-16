@@ -12,41 +12,41 @@ namespace WeakReference
     {
         public WeakBinaryTreeNode(int key, T value)
         {
-            this.key = key;
-            this.value = new WeakReference<T>(value);
+            Key = key;
+            Value = new WeakReference<T>(value);
         }
 
         public bool CheckAvailability()
         {
-            return value.TryGetTarget(out T target);
+            return Value.TryGetTarget(out T target);
         }
 
         public T GetValue()
         {
-            value.TryGetTarget(out T target);
+            Value.TryGetTarget(out T target);
             return target;
         }
 
         public void Rewriting(T newValue)
         {
-            this.value.SetTarget(newValue);
+            Value.SetTarget(newValue);
         }
 
-        public WeakReference<T> value { get; set; }
-        public int key { get; set; }
-        public WeakBinaryTreeNode<T> leftNode { get; set; }
-        public WeakBinaryTreeNode<T> rightNode { get; set; }
-        public WeakBinaryTreeNode<T> parentNode { get; set; }
+        public WeakReference<T> Value { get; set; }
+        public int Key { get; set; }
+        public WeakBinaryTreeNode<T> LeftNode { get; set; }
+        public WeakBinaryTreeNode<T> RightNode { get; set; }
+        public WeakBinaryTreeNode<T> ParentNode { get; set; }
 
         public Side? nodeSide  //nullable value type, determine the position
         {
             get
             {
-                if (parentNode == null)
+                if (ParentNode == null)
                 {
                     return null;
                 }
-                else if (parentNode.leftNode == this)
+                else if (ParentNode.LeftNode == this)
                 {
                     return Side.Left;
                 }

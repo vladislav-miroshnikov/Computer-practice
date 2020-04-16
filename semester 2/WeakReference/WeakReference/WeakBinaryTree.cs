@@ -13,46 +13,46 @@ namespace WeakReference
             this.time = time;
         }
 
-        public WeakBinaryTreeNode<T> rootNode { get; set; }
+        public WeakBinaryTreeNode<T> RootNode { get; set; }
         public WeakBinaryTreeNode<T> Add(WeakBinaryTreeNode<T> node, WeakBinaryTreeNode<T> currentNode = null)
         {
-            if (rootNode == null)
+            if (RootNode == null)
             {
-                node.parentNode = null;
-                return rootNode = node;
+                node.ParentNode = null;
+                return RootNode = node;
             }
 
             if (currentNode == null)
             {
-                currentNode = rootNode;
+                currentNode = RootNode;
             }
 
-            node.parentNode = currentNode;
-            if ((node.key.CompareTo(currentNode.key)) == 0)
+            node.ParentNode = currentNode;
+            if ((node.Key.CompareTo(currentNode.Key)) == 0)
             {
                 currentNode.Rewriting(node.GetValue()); //перезапись
                 return currentNode;
             }
-            else if ((node.key.CompareTo(currentNode.key)) < 0)
+            else if ((node.Key.CompareTo(currentNode.Key)) < 0)
             {
-                if (currentNode.leftNode == null)
+                if (currentNode.LeftNode == null)
                 {
-                    return currentNode.leftNode = node;
+                    return currentNode.LeftNode = node;
                 }
                 else
                 {
-                    return Add(node, currentNode.leftNode);
+                    return Add(node, currentNode.LeftNode);
                 }
             }
             else
             {
-                if (currentNode.rightNode == null)
+                if (currentNode.RightNode == null)
                 {
-                    return currentNode.rightNode = node;
+                    return currentNode.RightNode = node;
                 }
                 else
                 {
-                    return Add(node, currentNode.rightNode);
+                    return Add(node, currentNode.RightNode);
                 }
             }
         }
@@ -67,33 +67,33 @@ namespace WeakReference
         {
             if (startWithNode == null)
             {
-                startWithNode = rootNode;
+                startWithNode = RootNode;
             }
 
-            if (((key.CompareTo(startWithNode.key)) == 0) && (startWithNode.CheckAvailability()))
+            if (((key.CompareTo(startWithNode.Key)) == 0) && (startWithNode.CheckAvailability()))
             {
                 return startWithNode;
             }
-            else if ((key.CompareTo(startWithNode.key)) < 0)
+            else if ((key.CompareTo(startWithNode.Key)) < 0)
             {
-                if (startWithNode.leftNode == null)
+                if (startWithNode.LeftNode == null)
                 {
                     return null;
                 }
                 else
                 {
-                    return FindNode(key, startWithNode.leftNode);
+                    return FindNode(key, startWithNode.LeftNode);
                 }
             }
             else
             {
-                if (startWithNode.rightNode == null)
+                if (startWithNode.RightNode == null)
                 {
                     return null;
                 }
                 else
                 {
-                    return FindNode(key, startWithNode.rightNode);
+                    return FindNode(key, startWithNode.RightNode);
                 }
             }
         }
@@ -127,44 +127,44 @@ namespace WeakReference
             }           
             Side? currentNodeSide = node.nodeSide;
             //The node has no subnodes case
-            if (node.leftNode == null && node.rightNode == null)
+            if (node.LeftNode == null && node.RightNode == null)
             {
                 if (currentNodeSide == Side.Left)
                 {
-                    node.parentNode.leftNode = null;                    
+                    node.ParentNode.LeftNode = null;                    
                 }
                 else if (currentNodeSide == Side.Right)
                 {                    
-                    node.parentNode.rightNode = null;
+                    node.ParentNode.RightNode = null;
                 }
             }
             //No left node, put the right one in place of the deleted case
-            else if (node.leftNode == null)
+            else if (node.LeftNode == null)
             {
                 if (currentNodeSide == Side.Left)
                 {
-                    node.parentNode.leftNode = node.rightNode;
+                    node.ParentNode.LeftNode = node.RightNode;
                 }
                 else if (currentNodeSide == Side.Right)
                 {
-                    node.parentNode.rightNode = node.rightNode;
+                    node.ParentNode.RightNode = node.RightNode;
                 }
 
-                node.rightNode.parentNode = node.parentNode;
+                node.RightNode.ParentNode = node.ParentNode;
             }
             //No right node, put the left one in the place of the deleted case
-            else if (node.rightNode == null)
+            else if (node.RightNode == null)
             {
                 if (currentNodeSide == Side.Left)
                 {
-                    node.parentNode.leftNode = node.leftNode;
+                    node.ParentNode.LeftNode = node.LeftNode;
                 }
                 else if (currentNodeSide == Side.Right)
                 {
-                    node.parentNode.rightNode = node.leftNode;
+                    node.ParentNode.RightNode = node.LeftNode;
                 }
 
-                node.leftNode.parentNode = node.parentNode;
+                node.LeftNode.ParentNode = node.ParentNode;
             }
             //If both children are present, then the right one is replaced with the left one, 
             //and the left one is inserted into the right one
@@ -173,23 +173,23 @@ namespace WeakReference
                 switch (currentNodeSide)
                 {
                     case Side.Left:
-                        node.parentNode.leftNode = node.rightNode;
-                        node.rightNode.parentNode = node.parentNode;
-                        Add(node.leftNode, node.rightNode);
+                        node.ParentNode.LeftNode = node.RightNode;
+                        node.RightNode.ParentNode = node.ParentNode;
+                        Add(node.LeftNode, node.RightNode);
                         break;
                     case Side.Right:
-                        node.parentNode.rightNode = node.rightNode;
-                        node.rightNode.parentNode = node.parentNode;
-                        Add(node.leftNode, node.rightNode);
+                        node.ParentNode.RightNode = node.RightNode;
+                        node.RightNode.ParentNode = node.ParentNode;
+                        Add(node.LeftNode, node.RightNode);
                         break;
                     default:
-                        WeakBinaryTreeNode<T> auxiliaryLeft = node.leftNode;
-                        WeakBinaryTreeNode<T> auxiliaryRightLeft = node.rightNode.leftNode;
-                        WeakBinaryTreeNode<T> auxiliaryRightRight = node.rightNode.rightNode;
-                        node.key = node.rightNode.key;
-                        node.value = node.rightNode.value;
-                        node.rightNode = auxiliaryRightRight;
-                        node.leftNode = auxiliaryRightLeft;
+                        WeakBinaryTreeNode<T> auxiliaryLeft = node.LeftNode;
+                        WeakBinaryTreeNode<T> auxiliaryRightLeft = node.RightNode.LeftNode;
+                        WeakBinaryTreeNode<T> auxiliaryRightRight = node.LeftNode.RightNode;
+                        node.Key = node.RightNode.Key;
+                        node.Value = node.RightNode.Value;
+                        node.RightNode = auxiliaryRightRight;
+                        node.LeftNode = auxiliaryRightLeft;
                         Add(auxiliaryLeft, node);
                         break;
                 }
