@@ -11,12 +11,12 @@
         }
 
         private Suits suit;
-        public int cardValue { get; set; }
+        public int СardValue { get; set; }
 
-        public Cards(Suits _suit, int _cardValue)
+        public Cards(Suits suit, int cardValue)
         {
-            suit = _suit;
-            cardValue = _cardValue;
+            this.suit = suit;
+            СardValue = cardValue;
         }
 
         public static int[] values = new int[13] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11 };

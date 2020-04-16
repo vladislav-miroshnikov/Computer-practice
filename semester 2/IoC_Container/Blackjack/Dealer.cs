@@ -15,7 +15,7 @@
         public bool BlackjackCheck<T>(T bot) where T : AbstractMan
         {
             bool p = false;
-            if (list[0].cardValue == 10 || (list[0].cardValue == 11))
+            if (List[0].СardValue == 10 || (List[0].СardValue == 11))
             {
                 if ((Sum() == 21) && (bot.Sum() != 21))
                 {
@@ -23,13 +23,13 @@
                 }
                 else if ((Sum() == 21) && (bot.Sum() == 21))
                 {
-                    bot.playerWallet += bot.bet;
+                    bot.PlayerWallet += bot.Bet;
                     p = true;
                 }
             }
             if (bot.Sum() == 21)
             {
-                bot.playerWallet += (int)(bot.bet + bot.bet * 3 / 2);
+                bot.PlayerWallet += (int)(bot.Bet + bot.Bet * 3 / 2);
                 p = true;
             }
             return p;
@@ -40,7 +40,7 @@
             if ((Sum() > 21 && bot.Sum() <= 21) ||
                ((bot.Sum() <= 21 && Sum() <= 21) && (bot.Sum() > Sum())))
             {
-                bot.playerWallet += bot.bet * 2;
+                bot.PlayerWallet += bot.Bet * 2;
             }
         }
     }

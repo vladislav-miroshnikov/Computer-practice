@@ -1,26 +1,27 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace Blackjack
 {
     public class BotSecond : AbstractMan
     {
 
-        public BotSecond(int _playerWallet, int _gamesCount)
+        public BotSecond(int playerWallet, int gamesCount)
         {
-            playerWallet = _playerWallet;
-            gamesCount = _gamesCount;
+            PlayerWallet = playerWallet;
+            GamesCount = gamesCount;
         }
 
-        public int gamesCount { get; set; }
+        public int GamesCount { get; set; }
 
         public void MakeBet()
         {
             for (; ; )
             {
-                bet = rand.Next(1, 50);
-                if (bet <= playerWallet)  //проверка, если вдруг сгенерируется ставка, превосходящая имеющиеся деньги на руках
+                Bet = rand.Next(1, 50);
+                if (Bet <= PlayerWallet)  //проверка, если вдруг сгенерируется ставка, превосходящая имеющиеся деньги на руках
                 {
-                    playerWallet -= bet;
+                    PlayerWallet -= Bet;
                     break;
                 }
 
@@ -28,20 +29,19 @@ namespace Blackjack
 
         }
 
-        private void Surrender(int bet)
+        private void Surrender()
         {
-            playerWallet += (int)(bet / 2);
-            list.RemoveRange(0, list.Count);
+            PlayerWallet += (int)(Bet / 2);
+            List.RemoveRange(0, List.Count);
         }
 
-        private void Double(ref int bet)
+        private void Double()
         {
-            //использую ref, чтобы ставка перезаписалась
-            playerWallet -= bet;
-            bet *= 2;
+            PlayerWallet -= Bet;
+            Bet *= 2;
         }
 
-        public void Strategy(int dealerValue, ref int bet)
+        public void Strategy(int dealerValue)
         {
             int sum = Sum();
             for (; ; ) //стратегия завершается, когда достигли break, более "агрессивная стратегия"
@@ -58,7 +58,7 @@ namespace Blackjack
                 else if ((dealerValue == 11 && sum == 15)
                     || ((dealerValue >= 10 && dealerValue <= 11) && (sum == 16)))
                 {
-                    Surrender(bet);
+                    Surrender();
                     break;
                 }
                 //describe the option "HIT"
@@ -76,7 +76,7 @@ namespace Blackjack
                     || ((dealerValue >= 2 && dealerValue <= 11) && (sum == 11))
                     || ((dealerValue >= 2 && dealerValue <= 9) && (sum == 10)))
                 {
-                    Double(ref bet);
+                    Double();
                     GetOneCard();
                     break;
                 }
@@ -90,13 +90,13 @@ namespace Blackjack
         }
         public void Info()
         {
-            if (playerWallet <= 0)
+            if (PlayerWallet <= 0)
             {
-                Debug.WriteLine($"bot2 lost on the {gamesCount} game");
+                Console.WriteLine($"bot2 lost on the {GamesCount} game");
             }
             else
             {
-                Debug.WriteLine($"bot2 bank is {playerWallet}");
+                Console.WriteLine($"bot2 bank is {PlayerWallet}");
             }
         }
     }
