@@ -30,9 +30,9 @@ namespace UnitTestProject
             bmp = new Picture();
             pixelsStandart = new RGB[height, width];
             pixelsOriginal = new RGB[height, width];
-            bmp.pixels = new RGB[height, width];
-            bmp.pixels = DownloadImage(input);
-            bmp.newPixels = bmp.pixels;
+           bmp.Pixels = new RGB[height, width];
+           bmp.Pixels = DownloadImage(input);
+           bmp.NewPixels =bmp.Pixels;
         }
 
         [ClassCleanup]
@@ -76,9 +76,9 @@ namespace UnitTestProject
             {
                 for (var j = 0; j < width; j++)
                 {
-                    Assert.AreEqual(pixelsStandart[i, j].rgbRed, bmp.newPixels[i, j].rgbRed);
-                    Assert.AreEqual(pixelsStandart[i, j].rgbGreen, bmp.newPixels[i, j].rgbGreen);
-                    Assert.AreEqual(pixelsStandart[i, j].rgbBlue, bmp.newPixels[i, j].rgbBlue);
+                    Assert.AreEqual(pixelsStandart[i, j].rgbRed,bmp.NewPixels[i, j].rgbRed);
+                    Assert.AreEqual(pixelsStandart[i, j].rgbGreen,bmp.NewPixels[i, j].rgbGreen);
+                    Assert.AreEqual(pixelsStandart[i, j].rgbBlue,bmp.NewPixels[i, j].rgbBlue);
                 }
             }
 
@@ -87,7 +87,7 @@ namespace UnitTestProject
         [TestMethod]
         public void GreyTest()
         {                       
-            Filters.Grey(bmp.pixels, bmp.newPixels, height, width);           
+            Filters.Grey(bmp.Pixels, bmp.NewPixels, height, width);           
             pixelsStandart = DownloadImage(grey);
             Check();
         }
@@ -95,7 +95,7 @@ namespace UnitTestProject
         [TestMethod]
         public void AverageTest()
         {
-            Filters.Average(bmp.pixels, bmp.newPixels, height, width);
+            Filters.Average(bmp.Pixels, bmp.NewPixels, height, width);
             pixelsStandart = DownloadImage(average);
             Check();
         }
@@ -103,7 +103,7 @@ namespace UnitTestProject
         [TestMethod]
         public void Gauss3x3Test()
         {
-            Filters.Gauss3x3Filter(bmp.pixels, bmp.newPixels, height, width);
+            Filters.Gauss3x3Filter(bmp.Pixels, bmp.NewPixels, height, width);
             pixelsStandart = DownloadImage(gauss3x);
             Check();
         }
@@ -111,7 +111,7 @@ namespace UnitTestProject
         [TestMethod]
         public void Gauss5x5Test()
         {
-            Filters.Gauss5x5Filter(bmp.pixels, bmp.newPixels, height, width);
+            Filters.Gauss5x5Filter(bmp.Pixels, bmp.NewPixels, height, width);
             pixelsStandart = DownloadImage(gauss5x);
             Check();
         }
@@ -119,7 +119,7 @@ namespace UnitTestProject
         [TestMethod]
         public void SobelXTest()
         {
-            Filters.Sobel(bmp.pixels, bmp.newPixels, height, width, 0);
+            Filters.Sobel(bmp.Pixels, bmp.NewPixels, height, width, 0);
             pixelsStandart = DownloadImage(sobelX);
             Check();
         }
@@ -127,7 +127,7 @@ namespace UnitTestProject
         [TestMethod]
         public void SobelYTest()
         {
-            Filters.Sobel(bmp.pixels, bmp.newPixels, height, width, 1);
+            Filters.Sobel(bmp.Pixels, bmp.NewPixels, height, width, 1);
             pixelsStandart = DownloadImage(sobelY);
             Check();
         }

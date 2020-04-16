@@ -19,27 +19,27 @@ namespace Task1Filters
             string filterName = args[1];
             uint height = bmp.ReturnHeight();
             uint width = bmp.ReturnWidth();
-            bmp.newPixels = new RGB[height, width];
+            bmp.NewPixels = new RGB[height, width];
 
             switch (filterName)
             {
                 case "grey":
-                    Filters.Grey(bmp.pixels, bmp.newPixels, height, width);
+                    Filters.Grey(bmp.Pixels, bmp.NewPixels, height, width);
                     break;
                 case "average":
-                    Filters.Average(bmp.pixels, bmp.newPixels, height, width);
+                    Filters.Average(bmp.Pixels, bmp.NewPixels, height, width);
                     break;
                 case "gauss3x3":
-                    Filters.Gauss3x3Filter(bmp.pixels, bmp.newPixels, height, width);
+                    Filters.Gauss3x3Filter(bmp.Pixels, bmp.NewPixels, height, width);
                     break;
                 case "gauss5x5":
-                    Filters.Gauss5x5Filter(bmp.pixels, bmp.newPixels, height, width);
+                    Filters.Gauss5x5Filter(bmp.Pixels, bmp.NewPixels, height, width);
                     break;
                 case "sobelX":
-                    Filters.Sobel(bmp.pixels, bmp.newPixels, height, width, 0);
+                    Filters.Sobel(bmp.Pixels, bmp.NewPixels, height, width, 0);
                     break;
                 case "sobelY":
-                    Filters.Sobel(bmp.pixels, bmp.newPixels, height, width, 1);
+                    Filters.Sobel(bmp.Pixels, bmp.NewPixels, height, width, 1);
                     break;
                 default:
                     throw new ArgumentException("check name of filter!");

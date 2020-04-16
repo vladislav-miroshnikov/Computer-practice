@@ -38,8 +38,8 @@ namespace Task1Filters
         private BITMAPFILEHEADER bitFile;
         private BITMAPINFOHEADER bitInfo;
         private int vect;
-        public RGB[,] pixels { get; set; }
-        public RGB[,] newPixels { get; set; }
+        public RGB[,] Pixels { get; set; }
+        public RGB[,] NewPixels { get; set; }
         public void Reading(FileStream input)
         {
             BinaryReader reader = new BinaryReader(input);
@@ -65,14 +65,14 @@ namespace Task1Filters
                 throw new Exception("wrong picture format, try again");
             }
             vect = (int)(4 - (bitInfo.Width * (bitInfo.BitCount / 8)) % 4) & 3;
-            pixels = new RGB[bitInfo.Height, bitInfo.Width];
+            Pixels = new RGB[bitInfo.Height, bitInfo.Width];
             for (var i = 0; i < bitInfo.Height; i++)
             {
                 for (var j = 0; j < bitInfo.Width; j++)
                 {
-                    pixels[i, j].rgbRed = (byte)reader.ReadByte();
-                    pixels[i, j].rgbGreen = (byte)reader.ReadByte();
-                    pixels[i, j].rgbBlue = (byte)reader.ReadByte();
+                    Pixels[i, j].rgbRed = (byte)reader.ReadByte();
+                    Pixels[i, j].rgbGreen = (byte)reader.ReadByte();
+                    Pixels[i, j].rgbBlue = (byte)reader.ReadByte();
 
                     if (bitInfo.BitCount == 32)
                     {
@@ -110,9 +110,9 @@ namespace Task1Filters
             {
                 for (var j = 0; j < bitInfo.Width; j++)
                 {
-                    writer.Write(newPixels[i, j].rgbRed);
-                    writer.Write(newPixels[i, j].rgbGreen);
-                    writer.Write(newPixels[i, j].rgbBlue);
+                    writer.Write(NewPixels[i, j].rgbRed);
+                    writer.Write(NewPixels[i, j].rgbGreen);
+                    writer.Write(NewPixels[i, j].rgbBlue);
                     if (bitInfo.BitCount == 32)
                     {
                         writer.Write(0);
