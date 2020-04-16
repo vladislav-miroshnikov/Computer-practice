@@ -18,7 +18,7 @@
         <ComboBox x:Name="curvesComboBox" HorizontalAlignment="Left"  Margin="0,34,0,0" VerticalAlignment="Top" Width="154">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding equation}" />
+                    <TextBlock Text="{Binding Equation}" />
                 </DataTemplate>
             </ComboBox.ItemTemplate>
             <ComboBox.Resources>
