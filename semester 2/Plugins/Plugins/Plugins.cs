@@ -16,8 +16,9 @@ namespace Plugins
         {
            //The solution is designed as a Unit test
             try
-            {
-                string filePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory);
+            {  
+                string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DllFiles");
+             
                 DirectoryInfo directory = new DirectoryInfo(filePath);
                 List<FileInfo> dllList = new List<FileInfo>();
 
