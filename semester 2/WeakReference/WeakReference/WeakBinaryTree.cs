@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace WeakReference
@@ -103,11 +104,12 @@ namespace WeakReference
             WeakBinaryTreeNode<T> node = FindNode(key);
             if (node != null)
             {
+                Console.WriteLine($"for key {key} value is: {node.GetValue().ToString()} ");
                 return node.GetValue();
             }
             else
             {
-                Debug.WriteLine($"nothing was found for this key = {key}");
+                Console.WriteLine($"nothing was found for this key = {key}");
                 return (default);
             }
         }
