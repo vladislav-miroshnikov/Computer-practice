@@ -17,9 +17,7 @@ namespace Plugins
            //The solution is designed as a Unit test
             try
             {
-                string filePath = @"C:\my_projects\sem2\Plugins\Plugins\DllFiles";
-                //string filePath = Console.WriteLine();
-                //You can enter the path to any desired folder
+                string filePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory);
                 DirectoryInfo directory = new DirectoryInfo(filePath);
                 List<FileInfo> dllList = new List<FileInfo>();
 
