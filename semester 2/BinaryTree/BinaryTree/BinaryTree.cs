@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace BinaryTree
 {
@@ -93,11 +94,12 @@ namespace BinaryTree
         {
             if (FindNode(key) != null)
             {
+                Console.WriteLine($"value for key {key} - {FindNode(key).Value}");
                 return FindNode(key).Value;
             }
             else
             {
-                Debug.WriteLine($"nothing was found for this Key = {key}");
+                Console.WriteLine($"nothing was found for this Key = {key}");
                 return (default);
             }
         }
@@ -112,7 +114,7 @@ namespace BinaryTree
         {
             if (node == null)
             {
-                Debug.WriteLine($"nothing to delete by Key {key}");
+                Console.WriteLine($"nothing to delete by Key {key}");
                 return;
             }
 
