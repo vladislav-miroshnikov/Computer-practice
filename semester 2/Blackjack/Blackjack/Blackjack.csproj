@@ -43,7 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractMan.cs" />
+    <Compile Include="AbstractPlayer.cs" />
+    <Compile Include="Action.cs" />
     <Compile Include="BotFisrt.cs" />
     <Compile Include="BotSecond.cs" />
     <Compile Include="Cards.cs" />

@@ -1,33 +1,44 @@
-﻿namespace Blackjack
+﻿using System;
+using System.Collections.Generic;
+using static Blackjack.Action;
+
+namespace Blackjack
 {
-    class Dealer : AbstractMan
-    {    
-        public void Strategy()
+    public class Dealer 
+    {
+        public List<Cards> List { get; set; }
+
+        public Dealer()
         {
-            int sum = Sum();
+            List = new List<Cards>();
+        }
+
+        public void Strategy(List<Cards> cardsList)
+        {
+            int sum = Sum(List);
             while(sum < 17)
             {
-                GetOneCard();
-                sum = Sum();
+                GetOneCard(List, cardsList);
+                sum = Sum(List);
             }
         }
 
-        public bool BlackjackCheck<T>(T bot) where T : AbstractMan
+        public bool BlackjackCheck(AbstractPlayer bot) 
         {
             bool p = false;
-            if (List[0].СardValue == 10 || (List[0].СardValue == 11))
+            if (List[0].CardValue == 10 || (List[0].CardValue == 11))
             {
-                if ((Sum() == 21) && (bot.Sum() != 21))
+                if ((Sum(List) == 21) && (Sum(bot.List) != 21))
                 {
                     p = true;
                 }
-                else if ((Sum() == 21) && (bot.Sum() == 21))
+                else if ((Sum(List) == 21) && (Sum(bot.List) == 21))
                 {
                     bot.PlayerWallet += bot.Bet;
                     p = true;
                 }
             }
-            if (bot.Sum() == 21)
+            if (Sum(bot.List) == 21)
             {                
                 bot.PlayerWallet += (int)(bot.Bet + bot.Bet * 3 / 2);
                 p = true;
@@ -35,12 +46,14 @@
             return p;
         }
 
-        public void WinnerCheck<T>(T bot) where T : AbstractMan
+        public void WinnerCheck(AbstractPlayer bot) 
         {            
-            if ((Sum() > 21 && bot.Sum() <= 21) ||
-               ((bot.Sum() <= 21 && Sum() <= 21) && (bot.Sum() > Sum())))
+            if ((Sum(List) > 21 && Sum(bot.List) <= 21) ||
+               ((Sum(bot.List) <= 21 && Sum(List) <= 21) && (Sum(bot.List) > Sum(List))))
             {
+               
                 bot.PlayerWallet += bot.Bet * 2;
+
             }
         }
     }

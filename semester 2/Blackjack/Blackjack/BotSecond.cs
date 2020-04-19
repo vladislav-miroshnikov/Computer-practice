@@ -1,49 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using static Blackjack.Action;
 
 namespace Blackjack
 {
-    public class BotSecond : AbstractMan
+    public class BotSecond : AbstractPlayer
     {
 
-        public BotSecond(int playerWallet, int gamesCount)
+        public BotSecond(int playerWallet, int gamesCount, string botName)
+            :base(playerWallet, gamesCount, botName)
         {
-            PlayerWallet = playerWallet;
-            GamesCount = gamesCount;
+            
         }
 
-        public int GamesCount { get; set; }
-
-        public void MakeBet()
+        public override void Strategy(int dealerValue, List<Cards> cardsList)
         {
-            for (; ; )
-            {
-                Bet = rand.Next(1, 50);
-                if (Bet <= PlayerWallet)  //проверка, если вдруг сгенерируется ставка, превосходящая имеющиеся деньги на руках
-                {
-                    PlayerWallet -= Bet;
-                    break;
-                }
-               
-            }
-
-        }
-
-        private void Surrender()
-        {
-            PlayerWallet += (int)(Bet / 2);
-            List.RemoveRange(0, List.Count);
-        }
-
-        private void Double()
-        {
-            PlayerWallet -= Bet;
-            Bet *= 2;
-        }
-
-        public void Strategy(int dealerValue)
-        {
-            int sum = Sum();
+            int sum = Sum(List);
             for (; ; ) //стратегия завершается, когда достигли break, более "агрессивная стратегия"
             {
                 //describe the option "STAND"
@@ -68,7 +41,7 @@ namespace Blackjack
                     || ((dealerValue >= 2 && dealerValue <= 11) && ((sum == 12) || (sum >= 4 && sum <= 9)))
                     || ((dealerValue >= 10 && dealerValue <= 11) && (sum == 10)))
                 {
-                    GetOneCard();
+                    GetOneCard(List, cardsList);
                 }
                 //describe the option "DOUBLE"
                 else if (((dealerValue == 2) && (sum == 15))
@@ -77,27 +50,17 @@ namespace Blackjack
                     || ((dealerValue >= 2 && dealerValue <= 9) && (sum == 10)))
                 {
                     Double();
-                    GetOneCard();
+                    GetOneCard(List, cardsList);
                     break;
                 }
 
-                sum = Sum();
+                sum = Sum(List);
                 if (sum > 21)
                 {
                     break;
                 }
             }
         }
-        public void Info()
-        {
-            if (PlayerWallet <= 0) 
-            {
-                Console.WriteLine($"bot2 lost on the {GamesCount} game");
-            }
-            else
-            {
-                Console.WriteLine($"bot2 bank is {PlayerWallet}");
-            }
-        }
+        
     }
 }

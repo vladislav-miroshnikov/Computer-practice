@@ -11,19 +11,19 @@
         }
 
         private Suits suit;
-        public int СardValue { get; set; }
+        public int CardValue { get; set; }
 
         public Cards(Suits suit, int cardValue)
         {
             this.suit = suit;
-            СardValue = cardValue;
+            CardValue = cardValue;
         }
 
         public static int[] values = new int[13] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11 };
 
         //public override string ToString()
         //{
-        //    return string.Format("{0} of {1}", cardValue, suit);
+        //    return string.Format("{0} of {1}", CardValue, suit);
         //}
 
     }
