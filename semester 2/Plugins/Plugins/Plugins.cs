@@ -17,11 +17,11 @@ namespace Plugins
            //The solution is designed as a Unit test
             try
             {
+                //You can specify any path convenient for you
                 string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory);
                 string extraPart = @"bin\Debug";
                 int indexFirst = filePath.IndexOf(extraPart);
                 filePath = filePath.Remove(indexFirst, extraPart.Length).Insert(indexFirst, @"DllFiles");
-
                 DirectoryInfo directory = new DirectoryInfo(filePath);
                 List<FileInfo> dllList = new List<FileInfo>();
 
