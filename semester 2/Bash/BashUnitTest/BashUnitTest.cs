@@ -60,10 +60,6 @@ namespace BashUnitTest
             bash.Start("$a = 3");
             bash.Start("$b = 5");
             bash.Start($"    echo     {filePath}   |     file");
-            Assert.AreEqual(filePath, bash.Instruction.Commands[0].Arguments[0]);
-            Assert.AreEqual(filePath, bash.Instruction.Commands[0].Result[0]);
-            Assert.AreEqual(filePath, bash.Instruction.Commands[1].Arguments[0]);
-            Assert.AreEqual(".txt", bash.Instruction.Commands[1].Result[0]);
             bash.Start("echo $b");
             Assert.AreEqual("5", bash.Instruction.Commands[0].Result[0]);
         }
