@@ -82,12 +82,11 @@ namespace ChatLibrary
         private void PrintInformation()
         {
             Console.WriteLine("\n" +
-                              "Write the name of one of the teams below\n" +
+                              "Write the name of one of the commands below\n" +
                               "Also text that is not recognized as any of the following commands is regarded as a message and will be sent to all clients (if any):\n" +
-                              "-Connect  -  to connect to other clients\n" +
+                              "\n-Connect  -  to connect to other clients\n" +
                               "-Disconnect  -  to disconnect from this lobby\n" +
                               "-Clients  -  to show who is in this lobby now\n" +
-                              "-Help  -  to show this help window\n" +
                               "-Exit  -  to exit from chat\n");
         }       
     }

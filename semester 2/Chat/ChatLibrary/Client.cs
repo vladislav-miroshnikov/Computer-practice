@@ -213,8 +213,15 @@ namespace ChatLibrary
 
         public void Disconnect()
         {
+            if (ConnectedClients.Count == 0)
+            {
+                Console.WriteLine("You are not connected to anyone");
+                return;
+            }
+
             SendMessage('-' + clientIpEndPoint.ToString());
             ConnectedClients.Clear();
+
         }
 
         public void ShowClients()
