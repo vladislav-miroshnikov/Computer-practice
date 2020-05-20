@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Blackjack
 {
-    public abstract class AbstractPlayer
+    public abstract class AbstractPlayer : IBlackjack
     {
         protected Random rand = new Random();
         public string BotName { get; private set; }
-        public List<Cards> List { get; set; }
+        public List<Cards> PlayerList { get; set; }
         public int PlayerWallet { get; set; }
         public int Bet { get; set; }
 
@@ -15,28 +15,40 @@ namespace Blackjack
       
         public AbstractPlayer(int playerWallet, int gamesCount, string botName)
         {
-            List = new List<Cards>();
+            PlayerList = new List<Cards>();
             PlayerWallet = playerWallet;
             GamesCount = gamesCount;
             BotName = botName;
         }
 
-        public abstract void Strategy(int dealerValue, List<Cards> cardsList);
+        public abstract void ApplyStrategy(int dealerValue, List<Cards> cardsList);
+
+        public void GetTwoCard(List<Cards> list, List<Cards> cardsList)
+        {
+            for (int p = 0; p < 2; p++)
+            {
+                int y = cardsList.Count;
+                int i = rand.Next(0, y);
+                list.Add(cardsList[i]);
+                cardsList.RemoveAt(i);
+            }
+        }
+
+        public void GetOneCard(List<Cards> list, List<Cards> cardsList)
+        {
+            int y = cardsList.Count;
+            int i = rand.Next(0, y);
+            list.Add(cardsList[i]);
+            cardsList.RemoveAt(i);
+        }
 
         public void MakeBet()
         {
             if (PlayerWallet > 0)
             {
-                for (; ; )
-                {
-                    Bet = rand.Next(1, 50);
-                    if (Bet <= PlayerWallet)   //проверка, если вдруг сгенерируется ставка, превосходящая имеющиеся деньги на руках
-                    {
-                        PlayerWallet -= Bet;
-                        break;
-                    }
-
-                }
+                Bet = rand.Next(1, (int)(0.05 * PlayerWallet));
+                PlayerWallet -= Bet;
+                //ставку, больше чем 5% от имеющейся суммы, сделать нельзя
             }
             else
             {
@@ -48,7 +60,7 @@ namespace Blackjack
         protected void Surrender()
         {
             PlayerWallet += (int)(Bet / 2);
-            List.RemoveRange(0, List.Count);
+            PlayerList.RemoveRange(0, PlayerList.Count);
         }
 
         protected void Double()

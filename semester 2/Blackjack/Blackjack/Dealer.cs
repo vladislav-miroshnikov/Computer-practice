@@ -1,60 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
-using static Blackjack.Action;
+using System.Linq;
 
 namespace Blackjack
 {
-    public class Dealer 
+    public class Dealer : IBlackjack
     {
-        public List<Cards> List { get; set; }
+        private Random rand = new Random();
+        public List<Cards> DealerList { get; set; }
 
         public Dealer()
         {
-            List = new List<Cards>();
+            DealerList = new List<Cards>();
         }
 
-        public void Strategy(List<Cards> cardsList)
+        public void ApplyStrategy(List<Cards> cardsList)
         {
-            int sum = Sum(List);
-            while(sum < 17)
+            int sum = DealerList.Sum(x => x.CardValue);
+            while (sum < 17)
             {
-                GetOneCard(List, cardsList);
-                sum = Sum(List);
+                GetOneCard(DealerList, cardsList);
+                sum = DealerList.Sum(x => x.CardValue);
             }
         }
 
-        public bool BlackjackCheck(AbstractPlayer bot) 
+        public void GetTwoCard(List<Cards> list, List<Cards> cardsList)
         {
-            bool p = false;
-            if (List[0].CardValue == 10 || (List[0].CardValue == 11))
+            for (int p = 0; p < 2; p++)
             {
-                if ((Sum(List) == 21) && (Sum(bot.List) != 21))
-                {
-                    p = true;
-                }
-                else if ((Sum(List) == 21) && (Sum(bot.List) == 21))
-                {
-                    bot.PlayerWallet += bot.Bet;
-                    p = true;
-                }
+                int y = cardsList.Count;
+                int i = rand.Next(0, y);
+                list.Add(cardsList[i]);
+                cardsList.RemoveAt(i);
             }
-            if (Sum(bot.List) == 21)
-            {                
-                bot.PlayerWallet += (int)(bot.Bet + bot.Bet * 3 / 2);
-                p = true;
-            }
-            return p;
         }
 
-        public void WinnerCheck(AbstractPlayer bot) 
-        {            
-            if ((Sum(List) > 21 && Sum(bot.List) <= 21) ||
-               ((Sum(bot.List) <= 21 && Sum(List) <= 21) && (Sum(bot.List) > Sum(List))))
-            {
-               
-                bot.PlayerWallet += bot.Bet * 2;
-
-            }
+        public void GetOneCard(List<Cards> list, List<Cards> cardsList)
+        {
+            int y = cardsList.Count;
+            int i = rand.Next(0, y);
+            list.Add(cardsList[i]);
+            cardsList.RemoveAt(i);
         }
+
     }
 }

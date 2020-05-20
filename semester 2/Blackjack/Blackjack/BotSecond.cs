@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using static Blackjack.Action;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Blackjack
 {
@@ -14,9 +12,9 @@ namespace Blackjack
             
         }
 
-        public override void Strategy(int dealerValue, List<Cards> cardsList)
+        public override void ApplyStrategy(int dealerValue, List<Cards> cardsList)
         {
-            int sum = Sum(List);
+            int sum = PlayerList.Sum(x => x.CardValue);
             for (; ; ) //стратегия завершается, когда достигли break, более "агрессивная стратегия"
             {
                 //describe the option "STAND"
@@ -41,7 +39,7 @@ namespace Blackjack
                     || ((dealerValue >= 2 && dealerValue <= 11) && ((sum == 12) || (sum >= 4 && sum <= 9)))
                     || ((dealerValue >= 10 && dealerValue <= 11) && (sum == 10)))
                 {
-                    GetOneCard(List, cardsList);
+                    GetOneCard(PlayerList, cardsList);
                 }
                 //describe the option "DOUBLE"
                 else if (((dealerValue == 2) && (sum == 15))
@@ -50,11 +48,11 @@ namespace Blackjack
                     || ((dealerValue >= 2 && dealerValue <= 9) && (sum == 10)))
                 {
                     Double();
-                    GetOneCard(List, cardsList);
+                    GetOneCard(PlayerList, cardsList);
                     break;
                 }
 
-                sum = Sum(List);
+                sum = PlayerList.Sum(x => x.CardValue);
                 if (sum > 21)
                 {
                     break;

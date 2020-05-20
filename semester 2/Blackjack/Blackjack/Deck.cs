@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using static Blackjack.Action;
 
 namespace Blackjack
 {
@@ -9,17 +8,6 @@ namespace Blackjack
         public List<Cards> CardsList { get; private set; }
 
         private Random rand = new Random();
-        public string DeckName { get; private set; }
-
-        public Deck(string deckName)
-        {
-            DeckName = deckName;
-        }
-
-        public void GetInfo()
-        {
-            Console.WriteLine($"Name of deck: {DeckName}");
-        }
 
         public void CreateCards()
         {
@@ -34,26 +22,22 @@ namespace Blackjack
 
                 foreach (int s in Cards.values)
                 {
-                    CardsList.Add(new Cards(Cards.Suits.Diamonds, s));
-                    
-
+                    CardsList.Add(new Cards(Cards.Suits.Diamonds, s));                   
                 }
 
                 foreach (int s in Cards.values)
                 {
-                    CardsList.Add(new Cards(Cards.Suits.Spades, s));
-                   
-
+                    CardsList.Add(new Cards(Cards.Suits.Spades, s));                   
                 }
 
                 foreach (int s in Cards.values)
                 {
-                    CardsList.Add(new Cards(Cards.Suits.Clubs, s));
-                   
+                    CardsList.Add(new Cards(Cards.Suits.Clubs, s));                   
                 }
                 
             }
 
+            //shuffle
             for (int o = CardsList.Count - 1; o >= 1; o--)
             {
                 int j = rand.Next(o + 1);
@@ -64,7 +48,7 @@ namespace Blackjack
 
         }
 
-        //public void Bring()
+        //public void ShowCards()
         //{
         //    for (int i = 0; i < 416; i++)
         //    {
@@ -72,46 +56,5 @@ namespace Blackjack
         //    }
         //    Console.WriteLine("all");
         //}
-
-  
-        public void Game(AbstractPlayer playerFirst, AbstractPlayer playerSecond, Dealer dealer) 
-        {   //принимает AbstractPlayer, чтобы избавиться от специфичных параметров, и в метод мог приходить любой бот
-            if (CardsList.Count <= 52) //считаем, что когда останется 52 карты и менее-перемешиваем
-            {
-                CreateCards();
-            }
-
-            playerFirst.MakeBet();
-            playerSecond.MakeBet();
-            if (playerFirst.Bet != 0 || playerSecond.Bet != 0)
-            {
-                GetTwoCard(dealer.List, CardsList);
-                if (playerFirst.Bet != 0)
-                {
-                    playerFirst.GamesCount++;
-                    GetTwoCard(playerFirst.List, CardsList);
-                    if (dealer.BlackjackCheck(playerFirst) == false)  //если вернется true,значит метод BlackjackCheck выполнился
-                    {
-                        playerFirst.Strategy(dealer.List[0].CardValue, CardsList);
-                        dealer.Strategy(CardsList);
-                        dealer.WinnerCheck(playerFirst);
-                    }
-                    playerFirst.List.RemoveRange(0, playerFirst.List.Count);
-                }
-                if (playerSecond.Bet != 0)
-                {
-                    playerSecond.GamesCount++;
-                    GetTwoCard(playerSecond.List, CardsList);
-                    if (dealer.BlackjackCheck(playerSecond) == false)
-                    {
-                        playerSecond.Strategy(dealer.List[0].CardValue, CardsList);
-                        dealer.Strategy(CardsList);
-                        dealer.WinnerCheck(playerSecond);
-                    }
-                    playerSecond.List.RemoveRange(0, playerSecond.List.Count);
-                }
-                dealer.List.Clear();
-            }
-        }
     }
 }

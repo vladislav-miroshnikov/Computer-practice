@@ -10,29 +10,27 @@ namespace Blackjack.Tests
         [TestMethod]
         public void BlackjackTest()
         {
-            BotFisrt botFirst = new BotFisrt(1000, 0, "John");
-            BotSecond botSecond = new BotSecond(1000, 0, "Conor");
+            BotFirst botJohn = new BotFirst(1000, 0, "John");
+            BotSecond botConor = new BotSecond(1000, 0, "Conor");
             Dealer dealer = new Dealer();
-            Deck myDeck = new Deck("Legendary table");
-            myDeck.CreateCards();
+            Game gameFirst = new Game();
             for (int i = 0; i < 400; i++)
             {
-                myDeck.Game(botFirst, botSecond, dealer);
+                gameFirst.PlayGame(botJohn, botConor);
             }
-            myDeck.GetInfo();
-            botFirst.Info();
-            botSecond.Info();
+
+            botJohn.Info();
+            botConor.Info();
 
             Console.WriteLine();
-            BotFisrt botMary = new BotFisrt(1000, 0, "Mary");
+            BotFirst botMary = new BotFirst(1000, 0, "Mary");
             BotSecond botKaty = new BotSecond(1000, 0, "Katy");
-            Deck myDecks = new Deck("Champion table");
-            myDecks.CreateCards();
+            Game gameSecond = new Game();
             for (int i = 0; i < 400; i++)
             {
-                myDecks.Game(botMary, botKaty, dealer);
+                gameSecond.PlayGame(botMary, botKaty);
             }
-            myDecks.GetInfo();
+          
             botMary.Info();
             botKaty.Info();
         }

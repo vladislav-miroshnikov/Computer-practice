@@ -44,12 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractPlayer.cs" />
-    <Compile Include="Action.cs" />
-    <Compile Include="BotFisrt.cs" />
+    <Compile Include="BotFirst.cs" />
     <Compile Include="BotSecond.cs" />
     <Compile Include="Cards.cs" />
     <Compile Include="Dealer.cs" />
     <Compile Include="Deck.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="IBlackjack.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

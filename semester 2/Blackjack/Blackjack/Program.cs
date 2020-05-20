@@ -6,16 +6,15 @@ namespace Blackjack
     {
         static void Main(string[] args)
         {
-            BotFisrt botFirst = new BotFisrt(1000, 0, "John");
+            BotFirst botFirst = new BotFirst(1000, 0, "John");
             BotSecond botSecond = new BotSecond(1000, 0, "Conor");
-            Dealer dealer = new Dealer();
-            Deck myDeck = new Deck("Round table");
-            myDeck.CreateCards();
+            Game game = new Game();
+            
             for (int i = 0; i < 400; i++)
             {
-                myDeck.Game(botFirst, botSecond, dealer);
+                game.PlayGame(botFirst, botSecond);
             }
-            myDeck.GetInfo();
+            
             botFirst.Info();
             botSecond.Info();
             Console.ReadKey();
