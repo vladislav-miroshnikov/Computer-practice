@@ -45,6 +45,7 @@ namespace ChatLibrary
             return Console.ReadLine();
         }
 
+
         public IPEndPoint GetIPEndPoint()
         {
             bool isCorrectInput = false;
@@ -137,7 +138,7 @@ namespace ChatLibrary
         {
             List<IPEndPoint> list = new List<IPEndPoint>();
             input = input.Remove(0, 1);
-            string[] iPs = input.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] iPs = input.Split(new char[] { ',' , ' ' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string tmp in iPs)
             {
                 int ipAddressLength = tmp.LastIndexOf(':');

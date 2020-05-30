@@ -46,6 +46,7 @@ namespace ChatLibrary
             waitingTask.Start();
         }
 
+        
         private void Wait()
         {
             try
@@ -54,7 +55,7 @@ namespace ChatLibrary
                 {
                     string inputMessage = string.Empty;
                     int bytes = 0;
-                    byte[] data = new byte[1024];
+                    byte[] data = new byte[2048];
                     EndPoint tmp = new IPEndPoint(IPAddress.Any, 0);
 
                     do
@@ -65,12 +66,22 @@ namespace ChatLibrary
 
                     IPEndPoint senderIp = tmp as IPEndPoint;
 
+                    if (inputMessage[0] == '@')
+                    {
+                        inputMessage = InteractionProtocol.MessageProcessing(inputMessage);
+                    }
+                    else if (inputMessage[0] == '$')
+                    {
+                        inputMessage = inputMessage.Remove(0, 1);
+                    }
+
                     if (inputMessage[0] != '*' && inputMessage[0] != '+' && inputMessage[0] != '-')
                     {
-                        Console.WriteLine($"[{senderIp.ToString()}] - {inputMessage}");
+                        Console.WriteLine($"[{senderIp.ToString()}] : {inputMessage}");
                     }
+
                     else
-                    {
+                    {               
                         ProccessMessage(inputMessage);
                     }
                 }
@@ -111,13 +122,14 @@ namespace ChatLibrary
                     tmpList.AddRange(ConnectedClients);
                     tmpList.Remove(clientIP);
                     tmpList.Add(clientIpEndPoint);
-                    string ipList = "+";
+                    string ipList = "$+";
 
                     foreach (IPEndPoint ip in tmpList)
                     {
                         ipList += ip.Address.ToString() + ":" + ip.Port.ToString() + ",";
                     }
                     ipList = ipList.Remove(ipList.Length - 1);
+                    
                     byte[] ipdata = Encoding.Unicode.GetBytes(ipList);
                     socket.SendTo(ipdata, clientIP);
                 }
@@ -174,13 +186,14 @@ namespace ChatLibrary
 
         public void SendIpsToClient(IPEndPoint ip)
         {
-            string message = "*" + clientIpEndPoint.Address.ToString() + ":" + clientIpEndPoint.Port.ToString() + ",";
+            string message = "$*" + clientIpEndPoint.Address.ToString() + ":" + clientIpEndPoint.Port.ToString() + ",";
             foreach (IPEndPoint temp in ConnectedClients)
             {
                 message += temp.Address.ToString() + ":" + temp.Port.ToString() + ",";
             }
 
             message = message.Remove(message.Length - 1);
+           
             byte[] data = Encoding.Unicode.GetBytes(message);
 
             socket.SendTo(data, ip);
@@ -188,12 +201,36 @@ namespace ChatLibrary
 
         public void SendMessage(string message)
         {
+            message = "$" + message;
             byte[] data = Encoding.Unicode.GetBytes(message);
 
             foreach (IPEndPoint tmpClientIP in ConnectedClients)
             {
                 socket.SendTo(data, tmpClientIP);
             }
+        }
+
+        
+        public void Disconnect()
+        {
+            if (ConnectedClients.Count == 0)
+            {
+                Console.WriteLine("You are not connected to anyone");
+                return;
+            }
+            string message = "$-" + clientIpEndPoint.ToString();
+
+           
+
+            byte[] data = Encoding.Unicode.GetBytes(message);
+
+            foreach (var connectedClient in ConnectedClients)
+            {
+                socket.SendTo(data, connectedClient);
+            }
+
+            ConnectedClients.Clear();
+
         }
 
         public IPEndPoint GetLocalIPEndPoint(int port)
@@ -211,27 +248,23 @@ namespace ChatLibrary
             return iPEndPoint;
         }
 
-        public void Disconnect()
-        {
-            if (ConnectedClients.Count == 0)
-            {
-                Console.WriteLine("You are not connected to anyone");
-                return;
-            }
-
-            SendMessage('-' + clientIpEndPoint.ToString());
-            ConnectedClients.Clear();
-
-        }
-
         public void ShowClients()
         {
-            Console.WriteLine("Clients list");
-            int i = 0;
-            foreach (IPEndPoint ip in ConnectedClients)
+            if (ConnectedClients.Count != 0)
             {
-                Console.WriteLine($"{i} : {ip.ToString()}");
+                Console.WriteLine("Clients list");
+                int i = 1;
+                foreach (IPEndPoint ip in ConnectedClients)
+                {
+                    Console.WriteLine($"{i} : {ip.ToString()}");
+                    i++;
+                }
             }
+            else
+            {
+                Console.WriteLine("The list of connected clients is empty");
+            }
+            
         }
 
         public void Exit()
