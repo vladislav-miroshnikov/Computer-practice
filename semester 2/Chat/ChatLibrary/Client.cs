@@ -49,6 +49,7 @@ namespace ChatLibrary
         
         private void Wait()
         {
+            IPEndPoint senderIp = null;
             try
             {
                 while (true)
@@ -64,7 +65,7 @@ namespace ChatLibrary
                         inputMessage += Encoding.Unicode.GetString(data, 0, bytes);
                     } while (socket.Available > 0);
 
-                    IPEndPoint senderIp = tmp as IPEndPoint;
+                    senderIp = tmp as IPEndPoint;
 
                     if (inputMessage[0] == '@')
                     {
@@ -90,7 +91,12 @@ namespace ChatLibrary
             {
                 if (e.ErrorCode == 10054)
                 {
-                    Console.WriteLine("This address is not used by anyone");
+                    ConnectedClients.Remove(senderIp);
+                    Console.WriteLine($"{senderIp} disconnected from chat");
+                    foreach(var client in ConnectedClients)
+                    {
+                        SendMessage($"-{senderIp}");
+                    }
                     StartWaiting();
                 }
                 else

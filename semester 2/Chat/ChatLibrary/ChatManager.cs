@@ -84,9 +84,9 @@ namespace ChatLibrary
             Console.WriteLine("\n" +
                               "Write the name of one of the commands below\n" +
                               "Also text that is not recognized as any of the following commands is regarded as a message and will be sent to all clients (if any):\n" +
-                              "\n-Connect  -  to connect to other clients\n" +
-                              "-Disconnect  -  to disconnect from this lobby\n" +
-                              "-Clients  -  to show who is in this lobby now\n" +
+                              "\n-Connect  -  connect to another chat (you can also connect to another version of the chat)\n" +
+                              "-Disconnect  -  to disconnect from chat\n" +
+                              "-Clients  -  to show connected clients\n" +
                               "-Exit  -  to exit from chat\n");
         }       
     }
