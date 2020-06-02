@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +10,21 @@ namespace ChatLibrary
 {
     public class Client
     {
+        [DllImport("Kernel32", EntryPoint = "SetConsoleCtrlHandler")]
+        private static extern bool SetSignalHandler(SignalHandler handler, bool add);
+
+        private delegate void SignalHandler(ConsoleSignal consoleSignal);
+        private SignalHandler signalHandler;
+
+        private enum ConsoleSignal
+        {
+            CtrlC = 0,
+            CtrlBreak = 1,
+            Close = 2,
+            LogOff = 5,
+            Shutdown = 6
+        }
+
         private readonly IPEndPoint clientIpEndPoint;
         public List<IPEndPoint> ConnectedClients { get; private set; }
 
@@ -20,6 +36,8 @@ namespace ChatLibrary
         public Client(IController clientController)
         {
             this.clientController = clientController;
+            signalHandler += HandleConsoleSignal;
+            SetSignalHandler(signalHandler, true);
             ConnectedClients = new List<IPEndPoint>();
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             clientIpEndPoint = GetLocalIPEndPoint(clientController.GetPortValue());
@@ -46,7 +64,11 @@ namespace ChatLibrary
             waitingTask.Start();
         }
 
-        
+        private void HandleConsoleSignal(ConsoleSignal consoleSignal)
+        {
+            Disconnect();
+        }
+
         private void Wait()
         {
             IPEndPoint senderIp = null;
@@ -89,20 +111,7 @@ namespace ChatLibrary
             }
             catch (SocketException e)
             {
-                if (e.ErrorCode == 10054)
-                {
-                    ConnectedClients.Remove(senderIp);
-                    Console.WriteLine($"{senderIp} disconnected from chat");
-                    foreach(var client in ConnectedClients)
-                    {
-                        SendMessage($"-{senderIp}");
-                    }
-                    StartWaiting();
-                }
-                else
-                {
-                    Console.WriteLine(e.Message);
-                }
+                Console.WriteLine(e.Message);
             }
         }
 
