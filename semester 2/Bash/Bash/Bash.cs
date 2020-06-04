@@ -62,7 +62,11 @@ namespace Bash
             Console.WriteLine("You can use:\ncat [FILENAME] \ncp [FILE1] [FILE2] \necho \nexit \nfile [FILENAME] \nman [COMMANDNAME]\nmkdir [DIRECTORY] \nmv [FILENAME] [NEWPATH]\n" +
                 "ps \npwd \nrm [FILENAME]\nwc [FILENAME] \nUse command man + [COMMANDNAME] to get information about the corresponding command" +
                 "\nAlso you can use:\noperator $ - assignment and use of local session variables\noperator | - pipelining of commands. The result of one command becomes an input for another\n" +
-                "A command that is not recognized as one of the above leads to an attempt to start by the operating system mechanisms\n ");                        
+                "A command that is not recognized as one of the above leads to an attempt to start by the operating system mechanisms\n " +
+                "\nDescription of working with two argument commands:\nConveyor for commands cp and mv.Because they are always with two arguments, " + 
+                                        "in the case pipelining the result of the previous command will be written into " + 
+                                        "the first argument of cp / mv, and the second argument will need to be entered manually " +
+                                        "\nexample: \ncorrect: echo[FILE1] | cp[FILE2]\nincorrect: echo [FILE1] [FILE2] | cp\n");                        
         }
 
         private void Execute(Instruction instructions)
@@ -107,10 +111,10 @@ namespace Bash
                                     //pipelining of commands, give to the next command, if it exists, the result of the previous
                                     if (i + 1 < instructions.Commands.Count)
                                     {
-                                        //Conveyor for commands cp and mv. Because they are always with two arguments, 
-                                        //in the case pipelining the result of the previous command will be written into 
+                                        //Conveyor for commands cp and mv.Because they are always with two arguments,
+                                        //in the case pipelining the result of the previous command will be written into
                                         //the first argument of cp / mv, and the second argument will need to be entered manually
-                                        //example: echo [FILE1] | cp [FILE2]
+                                        //example: echo[FILE1] | cp[FILE2]
                                         if ((instructions.Commands[i + 1] is Cp || instructions.Commands[i + 1] is Mv) &&
                                             instructions.Commands[i + 1].Arguments.Count != 0)
                                         {
