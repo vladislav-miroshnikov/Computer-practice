@@ -51,20 +51,24 @@ namespace Commands
         public void Execute()
         {
             string[] lines;
-            try
+            for (int i = 0; i < Arguments.Count; i++)
             {
-                lines = System.IO.File.ReadAllLines(Arguments[0]);
+                try
+                {
+                    lines = System.IO.File.ReadAllLines(Arguments[i]);
+                }
+                catch
+                {
+                    throw new ArgumentException("Incorrect path to file");
+                }
+                foreach (string path in lines)
+                {
+                    Console.WriteLine(path);
+                }
+                Console.WriteLine();
+                Result.AddRange(lines);
             }
-            catch
-            {
-                throw new ArgumentException("Incorrect path to file");
-            }
-            foreach (string path in lines)
-            {
-                Console.WriteLine(path);
-            }
-            Console.WriteLine();
-            Result.AddRange(lines);
+            
         }
 
         public bool IsCorrectArgs()

@@ -54,33 +54,37 @@ namespace Commands
             int numberOfWords;
             int numberOfBytes;
 
-            try
+            for(int i = 0; i < Arguments.Count; i++)
             {
-                string[] lines = System.IO.File.ReadAllLines(Arguments[0]);
-                numberOfLines = lines.Length;
-
-                numberOfWords = 0;
-                foreach (string tmp in lines)
+                try
                 {
-                    string[] words = tmp.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                    numberOfWords += words.Length;
+                    string[] lines = System.IO.File.ReadAllLines(Arguments[i]);
+                    numberOfLines = lines.Length;
+
+                    numberOfWords = 0;
+                    foreach (string tmp in lines)
+                    {
+                        string[] words = tmp.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                        numberOfWords += words.Length;
+                    }
+
+                    byte[] bytes = System.IO.File.ReadAllBytes(Arguments[0]);
+                    numberOfBytes = bytes.Length;
                 }
-
-                byte[] bytes = System.IO.File.ReadAllBytes(Arguments[0]);
-                numberOfBytes = bytes.Length;
+                catch
+                {
+                    throw new ArgumentException("Incorrect path to file");
+                }
+                Console.WriteLine($"Info about {i} file :");
+                Console.WriteLine($"Number of lines: {numberOfLines}");
+                Console.WriteLine($"Number of words: {numberOfWords}");
+                Console.WriteLine($"Number of bytes: {numberOfBytes}");
+                Result.Add(numberOfLines.ToString());
+                Result.Add(numberOfWords.ToString());
+                Result.Add(numberOfBytes.ToString());
+                Console.WriteLine();
             }
-            catch
-            {
-                throw new ArgumentException("Incorrect path to file");
-            }
-
-            Console.WriteLine($"Number of lines: {numberOfLines}");
-            Console.WriteLine($"Number of words: {numberOfWords}");
-            Console.WriteLine($"Number of bytes: {numberOfBytes}");
-            Result.Add(numberOfLines.ToString());
-            Result.Add(numberOfWords.ToString());
-            Result.Add(numberOfBytes.ToString());
-            Console.WriteLine();
+           
         }
 
         public bool IsCorrectArgs()

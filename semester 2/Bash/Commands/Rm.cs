@@ -50,16 +50,20 @@ namespace Commands
 
         public void Execute()
         {
-            try
+            for (int i = 0; i < Arguments.Count; i++)
             {
-                System.IO.File.Delete(Arguments[0]); //exist
-                Result.Add(Arguments[0]);
+                try
+                {
+                    System.IO.File.Delete(Arguments[i]); //exist
+                    Result.Add(Arguments[i]);
+                }
+                catch (ArgumentException e)
+                {
+                    throw e;
+                }
+
             }
-            catch(ArgumentException e)
-            {
-                throw e;
-            }
-            
+
         }
 
         public bool IsCorrectArgs()

@@ -51,15 +51,15 @@ namespace Commands
         public void Execute()
         {
             try
-            { 
+            {
                 System.IO.File.Move(Arguments[0], Arguments[1]);
                 Result.Add(Arguments[1]);
             }
-            catch(ArgumentException e)
+            catch (ArgumentException e)
             {
                 throw e;
             }
-            
+
         }
 
         public bool IsCorrectArgs()

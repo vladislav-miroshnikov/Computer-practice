@@ -51,15 +51,19 @@ namespace Commands
 
         public void Execute()
         {
-            if (Directory.Exists(Arguments[0]))
+            for (int i = 0; i < Arguments.Count; i++)
             {
-                Console.WriteLine("That path exists already.");
+                if (Directory.Exists(Arguments[i]))
+                {
+                    Console.WriteLine("That path exists already.");
+                }
+                else
+                {
+                    Directory.CreateDirectory(Arguments[i]);
+                    Result.Add(Arguments[i]);
+                }
             }
-            else
-            {
-                Directory.CreateDirectory(Arguments[0]);
-                Result.Add(Arguments[0]);
-            }        
+                
         }
 
         public bool IsCorrectArgs()

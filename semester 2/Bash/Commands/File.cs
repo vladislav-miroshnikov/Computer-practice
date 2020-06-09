@@ -52,16 +52,20 @@ namespace Commands
 
         public void Execute()
         {
-            try
+            for (int i = 0; i < Arguments.Count; i++)
             {
-                string type = Path.GetExtension(Arguments[0]);
-                Console.WriteLine(type);
-                Result.Add(type);
+                try
+                {
+                    string type = Path.GetExtension(Arguments[i]);
+                    Console.WriteLine(type);
+                    Result.Add(type);
+                }
+                catch (ArgumentException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
-            catch(ArgumentException e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            
         }
 
         public bool IsCorrectArgs()

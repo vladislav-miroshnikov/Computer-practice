@@ -55,11 +55,10 @@ namespace Commands
                 System.IO.File.Copy(Arguments[0], Arguments[1]);
                 Result.Add(Arguments[1]);
             }
-            catch(ArgumentException)
+            catch (ArgumentException)
             {
                 throw new ArgumentException("Copy error");
             }
-           
         }
 
         public bool IsCorrectArgs()
