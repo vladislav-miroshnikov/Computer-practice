@@ -18,6 +18,7 @@ namespace ProducersConsumers
             int numberOfConsumers = GetNumber();
             Producer[] producers = new Producer[numberOfProducers];
             Consumer[] consumers = new Consumer[numberOfConsumers];
+            List<Thread> threads = new List<Thread>();
             for(int i = 0; i < producers.Length; i++)
             {
                 producers[i] = new Producer($"producer {i + 1}", mutex, list);
@@ -30,10 +31,16 @@ namespace ProducersConsumers
             for (int i = 0; i < producers.Length; i++)
             {
                 producers[i].Exit();
+                threads.Add(producers[i].ThreadProducer);
             }
             for (int i = 0; i < consumers.Length; i++)
             {
                 consumers[i].Exit();
+                threads.Add(consumers[i].ThreadConsumer);
+            }
+            foreach(Thread thread in threads)
+            {
+                thread.Join();
             }
             Console.WriteLine("\nProgram ended");
             Console.ReadLine();
