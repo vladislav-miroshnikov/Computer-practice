@@ -10,6 +10,7 @@ namespace ThreadPoolLib
         public List<Thread> threads { get; private set; }
         private Queue<Action> actions = new Queue<Action>();
         private volatile bool isExit = false;
+        private bool disposed = false;
 
         public ThreadPool(int number)
         {
@@ -22,7 +23,7 @@ namespace ThreadPoolLib
         {
             for(int i = 0; i < numberOfThreads; i++)
             {
-                threads.Add(new Thread(new ThreadStart(Exec)));
+                threads.Add(new Thread(new ThreadStart(RunTask)));
                 threads[i].Name = $"{i}";
                 threads[i].IsBackground = true;
                 threads[i].Start();
@@ -36,16 +37,14 @@ namespace ThreadPoolLib
                 actions.Enqueue(a);
                 Monitor.PulseAll(actions);
             }
-
         }
 
-        
-        private void Exec()
+        private void RunTask()
         {
             while(!isExit)
             {
                 Monitor.Enter(actions);
-                if (actions.Count != 0)
+                if (actions.Count != 0 && !isExit)
                 {
                     Action action = actions.Dequeue();
                     Monitor.Exit(actions);
@@ -53,22 +52,52 @@ namespace ThreadPoolLib
                     action?.Invoke();
                     Thread.Sleep(10);          
                 }
-                else
+                else if (actions.Count == 0 && !isExit)
                 {
+                    Monitor.Wait(actions);
                     Monitor.Exit(actions);                    
+                }
+                else if (isExit)
+                {
+                    Monitor.Exit(actions);
                 }
             }
         }
 
         public void Dispose()
         {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        //according to Microsoft Docs
+
+        private void Dispose(bool disposing)
+        {
+            if (disposed)
+                return;
+
+            //unmanaged behavior because the thread may eventually fail to exit
             isExit = true;
+
+            lock (actions)
+            {
+                Monitor.PulseAll(actions);
+            }
+
             foreach (Thread thread in threads)
             {
                 thread.Join();
             }
-            threads.Clear();
-            actions = null;
+            if (disposing)
+            {
+                threads.Clear();
+                actions.Clear();
+            }
+
+            disposed = true;
         }
+
+        ~ThreadPool() => Dispose(false);    
     }
 }
