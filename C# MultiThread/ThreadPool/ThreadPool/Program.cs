@@ -10,7 +10,7 @@ namespace ThreadPool
             Action action = PrintHello;
             Console.WriteLine("Enter a number of threads in your ThreadPool:");
             ThreadPoolLib.ThreadPool threadPool = new ThreadPoolLib.ThreadPool(GetNumber());
-            for (int i = 0; i < 20; i++) 
+            for (int i = 0; i < 50; i++) 
             {
                 threadPool.Enqueue(action);
                 Thread.Sleep(10);
