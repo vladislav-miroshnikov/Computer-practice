@@ -9,7 +9,7 @@ namespace ProducersConsumers
         private Mutex mutex;
         private string name;
         private static Random random = new Random();
-        public Thread ThreadProducer { get; private set; }
+        private Thread ThreadProducer;
         private volatile bool isExit = false;
         public Producer(string name, Mutex mutex, List<int> list)
         {
