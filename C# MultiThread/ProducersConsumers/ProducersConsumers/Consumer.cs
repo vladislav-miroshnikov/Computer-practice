@@ -45,5 +45,10 @@ namespace ProducersConsumers
             isExit = true;
         }
 
+        public void Join()
+        {
+            ThreadConsumer.Join();
+        }
+
     }
 }
