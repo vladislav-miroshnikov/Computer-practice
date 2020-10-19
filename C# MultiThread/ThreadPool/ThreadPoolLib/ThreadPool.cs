@@ -49,8 +49,7 @@ namespace ThreadPoolLib
                     Action action = actions.Dequeue();
                     Monitor.Exit(actions);
                     Console.Write($"\nThread {Thread.CurrentThread.Name} done task : ");
-                    action?.Invoke();
-                    Thread.Sleep(10);          
+                    action?.Invoke();          
                 }
                 else if (actions.Count == 0 && !isExit)
                 {
