@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30503.244
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPI", "MPI\MPI.csproj", "{93A25074-6137-422D-B14C-6CF45D76A6BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPI.Tests", "MPI.Tests\MPI.Tests.csproj", "{E24392B4-BBD0-46FB-9F34-1FB460EA4600}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{93A25074-6137-422D-B14C-6CF45D76A6BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93A25074-6137-422D-B14C-6CF45D76A6BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93A25074-6137-422D-B14C-6CF45D76A6BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93A25074-6137-422D-B14C-6CF45D76A6BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E24392B4-BBD0-46FB-9F34-1FB460EA4600}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E24392B4-BBD0-46FB-9F34-1FB460EA4600}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E24392B4-BBD0-46FB-9F34-1FB460EA4600}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E24392B4-BBD0-46FB-9F34-1FB460EA4600}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FCCE7413-7AF9-421D-9862-943FBE265163}
+	EndGlobalSection
+EndGlobal
