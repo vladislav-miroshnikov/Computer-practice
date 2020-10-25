@@ -144,37 +144,40 @@ namespace MPI
                 }               
                 List<int> newArr = blockArrays[rank];
                 QSort.Quicksort(newArr, 0, newArr.Count - 1);
+                List<int>[] finalArrays = world.Gather(newArr, 0);
                 if (rank == 0)
                 {
-                    if(processors != 1) //in order not to make a mistake and not send to yourself
+                    List<int> finalList = new List<int>();
+                    foreach(var list in finalArrays)
                     {
-                        world.Send(newArr, (rank + 1) % processors, 0);
-                        newArr = world.Receive<List<int>>((rank + processors - 1) % processors, 0);
-                    }          
+                        finalList = finalList.Concat(list).ToList();
+                    }
                     StreamWriter streamWriter = new StreamWriter(args[1]);
-                    for (int i = 0; i < newArr.Count; i++)
+                    for (int i = 0; i < finalList.Count; i++)
                     {
-                        streamWriter.Write(newArr[i]);
-                        if (i != newArr.Count - 1)
+                        streamWriter.Write(finalList[i]);
+                        if (i != finalList.Count - 1)
                         {
                             streamWriter.Write(' ');
                         }
                     }
                     
                     streamWriter.Close();
-                }
-                else
-                {
-                    List<int> vs = new List<int>();
-                    vs = world.Receive<List<int>>((rank + processors - 1) % processors, 0);
-                    world.Send(vs.Concat(newArr).ToList(), (rank + 1) % processors, 0);
-                    vs.Clear();
+                    finalList.Clear();
                 }
                 array.Clear();
                 nodeArray.Clear();
                 masterArray.Clear();
                 pivotList.Clear();
                 newArr.Clear();
+                foreach(var t in finalArrays)
+                {
+                    t.Clear();
+                }
+                foreach(var t in blockArrays)
+                {
+                    t.Clear();
+                }
             }
         }
     }
