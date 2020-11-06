@@ -164,20 +164,20 @@ namespace MPI
                     
                     streamWriter.Close();
                     finalList.Clear();
+                    foreach (var t in finalArrays)
+                    {
+                        t.Clear();
+                    }
+                    foreach (var t in blockArrays)
+                    {
+                        t.Clear();
+                    }
                 }
                 array.Clear();
                 nodeArray.Clear();
                 masterArray.Clear();
                 pivotList.Clear();
-                newArr.Clear();
-                foreach(var t in finalArrays)
-                {
-                    t.Clear();
-                }
-                foreach(var t in blockArrays)
-                {
-                    t.Clear();
-                }
+                newArr.Clear();       
             }
         }
     }
