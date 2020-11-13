@@ -8,7 +8,7 @@ namespace Fibers
     {
         static void Main(string[] args)
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 8; i++)
             {
                 Process process = new Process();
                 ProcessManager.AddNewProcess(process);

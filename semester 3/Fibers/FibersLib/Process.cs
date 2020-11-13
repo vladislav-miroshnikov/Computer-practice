@@ -28,21 +28,29 @@ namespace FibersLib
                 : ShortPauseBoundary));
             }
             Priority = Rng.Next(PriorityLevelsNumber);
+            ProcessFlag = true;
         }
 
         public void Run()
         {
             for (int i = 0; i < _workIntervals.Count; i++)
             {
+                ProcessFlag = true;
                 Thread.Sleep(_workIntervals[i]); // work emulation
                 DateTime pauseBeginTime = DateTime.Now;
+               
                 do
                 {
                     ProcessManager.Switch(false);
+                    ProcessFlag = false;
+
                 } while ((DateTime.Now - pauseBeginTime).TotalMilliseconds < _pauseIntervals[i]); // I/O emulation
             }
             ProcessManager.Switch(true);
         }
+
+        public bool ProcessFlag { get; private set; } //true - ready to work area
+                                                      //false - I/O
 
         public int Priority
         {

@@ -8,15 +8,16 @@ namespace FibersLib
     public static class ProcessManager
     {
         private static SheduleType sheduleType;
-        public static Dictionary<Fiber, int> Fibers { get; private set; }
+        public static Dictionary<Fiber, Process> Fibers { get; private set; }
         private static Fiber currentFiber;
         private static Random random;
         private static bool isStarted;
         private static List<Fiber> removingFibers;
+        private static int windowSize;
 
         static ProcessManager()
         {
-            Fibers = new Dictionary<Fiber, int>();
+            Fibers = new Dictionary<Fiber, Process>();
             random = new Random();
             sheduleType = SheduleType.NonPriority;
             isStarted = false;
@@ -25,7 +26,7 @@ namespace FibersLib
 
         public static void AddNewProcess(Process process)
         {
-            Fibers.Add(new Fiber(process.Run), process.Priority);
+            Fibers.Add(new Fiber(process.Run), process);
         }
 
         public static void Start(bool isPriorityEnable)
@@ -35,6 +36,7 @@ namespace FibersLib
                 if (isPriorityEnable)
                 {
                     sheduleType = SheduleType.Priority;
+                    windowSize = PriorityInit();
                 }
 
                 isStarted = true;
@@ -52,6 +54,26 @@ namespace FibersLib
                     Console.WriteLine("Incorrect start! You have not added any processes.");
                 }
             }
+        }
+
+        private static int PriorityInit()
+        {
+            int maxPriority = Fibers.Values.OrderByDescending(x => x.Priority).First().Priority;
+            int highPriorityClassCount = 0; //we make a high priority class, average and low, choose a high
+            int bottomBorder = maxPriority / 3 * 2 + 1; 
+            if(bottomBorder > maxPriority)
+            {
+                bottomBorder = maxPriority;
+            }
+            foreach (KeyValuePair<Fiber, Process> pair in Fibers) 
+            {
+                if (pair.Value.Priority >= bottomBorder)
+                {
+                    highPriorityClassCount++;
+                }
+            }
+
+            return Fibers.Count / highPriorityClassCount;
         }
 
         public static void Switch(bool fiberFinished)
@@ -90,11 +112,11 @@ namespace FibersLib
                     
                     if(Fibers.Count > 1)
                     {
-                        int id = 0;
-                        Fibers.TryGetValue(currentFiber, out id);
+                        Process curProcess = null;
+                        Fibers.TryGetValue(currentFiber, out curProcess);
                         Fibers.Remove(currentFiber);
                         nextFiber = Fibers.ElementAt(random.Next(Fibers.Count)).Key;
-                        Fibers.Add(currentFiber, id);
+                        Fibers.Add(currentFiber, curProcess);
                     }
                     else
                     {
@@ -103,20 +125,26 @@ namespace FibersLib
                     break;
 
                 case SheduleType.Priority:
-
-                    nextFiber = Fibers.OrderByDescending(x => x.Value).First().Key;
-                    if(Fibers.Count > 1)
+                    
+                    var highSliceDict = Fibers.OrderByDescending(x => x.Value.Priority).Take(windowSize);
+                    var workingFibers = highSliceDict.Where((x) => x.Key != currentFiber && x.Value.ProcessFlag == true);
+                    if (workingFibers.Count() == 0)
                     {
-                        for (int i = 0; i < Fibers.Count; i++)
+                        if(highSliceDict.Count() == 1)
                         {
-                            if (Fibers.ElementAt(i).Key != nextFiber)
-                            {
-                                Fibers[Fibers.ElementAt(i).Key] = Fibers.ElementAt(i).Value + 1;
-                            }
+                            nextFiber = highSliceDict.First().Key;
                         }
-                        Fibers[nextFiber] = 0;
+                        else
+                        {
+                            nextFiber = highSliceDict.Where((x) => x.Key != currentFiber).First().Key;
+                        }
+                     
                     }
-
+                    else
+                    {
+                        nextFiber = workingFibers.First().Key;
+                    }
+                    
                     break;
 
             }
