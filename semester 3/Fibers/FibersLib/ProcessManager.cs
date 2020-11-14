@@ -58,8 +58,12 @@ namespace FibersLib
 
         private static int PriorityInit()
         {
+            /*We distinguish 3 abstract priority classes: low, medium, high.
+            The next step is to compute the lower bound for the high priority abstact class in terms 
+            of real priorities.Then count the number of processes in this high priority abstract class 
+            and calculate the ratio of high priorities to other classes*/
             int maxPriority = Fibers.Values.OrderByDescending(x => x.Priority).First().Priority;
-            int highPriorityClassCount = 0; //we make a high priority class, average and low, choose a high
+            int highPriorityClassCount = 0; 
             int bottomBorder = maxPriority / 3 * 2 + 1; 
             if(bottomBorder > maxPriority)
             {
