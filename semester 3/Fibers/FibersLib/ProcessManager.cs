@@ -129,7 +129,7 @@ namespace FibersLib
                     break;
 
                 case SheduleType.Priority:
-                    
+
                     var highSliceDict = Fibers.OrderByDescending(x => x.Value.Priority).Take(windowSize);
                     var workingFibers = highSliceDict.Where((x) => x.Key != currentFiber && x.Value.ProcessFlag == true);
                     if (workingFibers.Count() == 0)
@@ -140,9 +140,57 @@ namespace FibersLib
                         }
                         else
                         {
-                            nextFiber = highSliceDict.Where((x) => x.Key != currentFiber).First().Key;
-                        }
-                     
+                            if (highSliceDict.Count() == Fibers.Count) //the case when there is nothing outside the window
+                            {
+                                nextFiber = highSliceDict.Where((x) => x.Key != currentFiber).First().Key;
+                            }
+                            else
+                            {
+                                Random random = new Random();
+                                int type = random.Next(0, 2); //choose how we will switch: outside the window or within the window
+                                if (type == 0)
+                                {
+                                    nextFiber = highSliceDict.Where((x) => x.Key != currentFiber).First().Key;
+                                }
+                                else
+                                {
+                                    //we take the elements outside our window
+                                    var behindWindow = Fibers.OrderByDescending(x => x.Value.Priority).Where(s => s.Value.Priority < highSliceDict.ElementAt(highSliceDict.Count() - 1).Value.Priority);
+                                    int sum = 0;
+                                    for (int i = 0; i < behindWindow.Count(); i++)
+                                    {
+                                        sum += behindWindow.ElementAt(i).Value.Priority;
+                                    }
+                                    if (sum == 0)
+                                    {
+                                        //case if everything outside the window with priorities 0: choose any
+                                        nextFiber = behindWindow.ElementAt(random.Next(windowSize, behindWindow.Count())).Key;
+                                    }
+                                    else
+                                    {
+                                        //Here we create a probability distribution: our fibers are ordered in descending order of priorities, 
+                                        //among them some will be chosen, but the higher the priority of the fiber,
+                                        //the higher the probability of its selection
+
+                                        //Thus, from time to time there will be switches to fibers outside our window
+                                        int index = 0; 
+                                        int checkSum = 0;
+                                        int choice = random.Next(0, sum);
+                                        while (index != behindWindow.Count())
+                                        {
+                                            checkSum += behindWindow.ElementAt(index).Value.Priority;
+                                            if (checkSum > choice)
+                                            {
+                                                nextFiber = behindWindow.ElementAt(index).Key;
+                                                Console.WriteLine("Switch behind the window");
+                                                break;
+                                            }
+                                            index++;
+                                        }
+                                    }
+                                }
+                            }
+                        }             
                     }
                     else
                     {
