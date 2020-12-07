@@ -33,6 +33,10 @@ namespace ExamSystemLib.LockFree
 
         public bool Contains(LockFreeNode item)
         {
+            if(item == null)
+            {
+                return false;
+            }
             var pair = Find(item);
             if (pair == (null, null))
             {
@@ -86,6 +90,10 @@ namespace ExamSystemLib.LockFree
             }
             LockFreeNode curr = head;
             LockFreeNode pred = null;
+            if(item == null) //if some thread has already deleted item
+            {
+                return (null, null);
+            }
             while (!curr.Equals(item))
             {
                 if (curr.GetNextValue() == null)

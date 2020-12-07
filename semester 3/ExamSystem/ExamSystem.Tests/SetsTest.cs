@@ -11,7 +11,8 @@ namespace ExamSystem.Tests
     public class SetsTest
     {
         Random random = new Random();
-        
+        object locker = new object();
+
         [TestMethod]
         public void LockFreeTableTest()
         {
@@ -37,13 +38,15 @@ namespace ExamSystem.Tests
             IExamSystem system = (IExamSystem)param;
 
             for (int i = 0; i < 1000; i++)
-            {
+            {          
                 int studentId = random.Next();
                 int courseId = random.Next();
+                Monitor.Enter(locker);
                 system.Add(studentId, courseId);
                 Assert.IsTrue(system.Contains(studentId, courseId));
                 system.Remove(studentId, courseId);
                 Assert.IsTrue(!system.Contains(studentId, courseId));
+                Monitor.Exit(locker);
             }
         }
 
