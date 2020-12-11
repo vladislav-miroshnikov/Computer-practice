@@ -94,7 +94,8 @@ namespace ExamSystemLib.LockFree
             {
                 return (null, null);
             }
-            while (!curr.Equals(item))
+            //a lost case when some thread managed to delete curr
+            while (curr != null && !curr.Equals(item)) 
             {
                 if (curr.GetNextValue() == null)
                 {
@@ -103,6 +104,7 @@ namespace ExamSystemLib.LockFree
                 pred = curr;
                 curr = curr.GetNextValue();
             }
+           
             return (pred, curr);
 
         }

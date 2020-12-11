@@ -14,7 +14,7 @@ namespace ExamSystemLib.Coarse
         public CoarseHashTable(int size)
         {
             tableCount = 0;
-            tableSize = CheckTableSize(size);
+            tableSize = size;
             Table = new List<CoarseElement>[tableSize];
             for (int i = 0; i < tableSize; i++)
             {

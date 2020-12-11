@@ -9,7 +9,7 @@
         {
             tableSize = CheckTableSize(size);
             Table = new LockFreeList[tableSize];
-            for (int i = 0; i < size; i++) 
+            for (int i = 0; i < tableSize; i++) 
             {
                 Table[i] = new LockFreeList();
             }

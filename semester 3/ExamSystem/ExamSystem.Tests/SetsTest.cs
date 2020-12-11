@@ -4,49 +4,45 @@ using ExamSystemLib.LockFree;
 using ExamSystemLib.Coarse;
 using System.Threading;
 using ExamSystemLib;
+using System.Threading.Tasks;
 
 namespace ExamSystem.Tests
 {
     [TestClass]
     public class SetsTest
     {
-        Random random = new Random();
-        object locker = new object();
 
         [TestMethod]
         public void LockFreeTableTest()
         {
             LockFreeTable lockFreeTable = new LockFreeTable(512);
-
-            Thread[] threads = new Thread[25];
-            for (int i = 0; i < threads.Length; i++) 
-            { 
-                threads[i] = new Thread(new ParameterizedThreadStart(MakeRequest));
+            Task[] threads = new Task[25];
+            for (int i = 0; i < threads.Length; i++)
+            {
+                threads[i] = new Task(() => MakeRequest(lockFreeTable));
             }
             for (int i = 0; i < threads.Length; i++)
             {
-                threads[i].Start(lockFreeTable);
+                threads[i].Start();
             }
             for (int i = 0; i < threads.Length; i++)
             {
-                threads[i].Join();
+                threads[i].Wait();
+                threads[i].Dispose();
             }
         }
 
         private void MakeRequest(object param)
         {
             IExamSystem system = (IExamSystem)param;
-
             for (int i = 0; i < 1000; i++)
-            {          
-                int studentId = random.Next();
-                int courseId = random.Next();
-                Monitor.Enter(locker);
+            {
+                int studentId = Math.Abs(Guid.NewGuid().GetHashCode()) * Thread.CurrentThread.ManagedThreadId;
+                int courseId = Math.Abs(Guid.NewGuid().GetHashCode());
                 system.Add(studentId, courseId);
                 Assert.IsTrue(system.Contains(studentId, courseId));
                 system.Remove(studentId, courseId);
                 Assert.IsTrue(!system.Contains(studentId, courseId));
-                Monitor.Exit(locker);
             }
         }
 
@@ -54,19 +50,19 @@ namespace ExamSystem.Tests
         public void CoarseTableTest()
         {
             CoarseHashTable coarseHashTable = new CoarseHashTable(512);
-            Thread[] threads = new Thread[25];
+            Task[] threads = new Task[25];
             for (int i = 0; i < threads.Length; i++)
             {
-                threads[i] = new Thread(new ParameterizedThreadStart(MakeRequest));
-
+                threads[i] = new Task(() => MakeRequest(coarseHashTable));
             }
             for (int i = 0; i < threads.Length; i++)
             {
-                threads[i].Start(coarseHashTable);
+                threads[i].Start();
             }
             for (int i = 0; i < threads.Length; i++)
             {
-                threads[i].Join();
+                threads[i].Wait();
+                threads[i].Dispose();
             }
         }
 
