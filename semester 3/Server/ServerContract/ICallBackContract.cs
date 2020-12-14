@@ -10,5 +10,6 @@ namespace ServerContract
 
         [OperationContract(IsOneWay = true)]
         void ReturnProgress(int progress);
+
     }
 }

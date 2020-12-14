@@ -8,11 +8,11 @@ namespace ServerContract
 {
     internal interface IFilters
     {
-        void Grey(RGB[,] pixels, RGB[,] newPixels, uint height, uint width);
-        void Average(RGB[,] pixels, RGB[,] newPixels, uint height, uint width);
-        void Gauss3x3Filter(RGB[,] pixels, RGB[,] newPixels, uint height, uint width);
-        void Gauss5x5Filter(RGB[,] pixels, RGB[,] newPixels, uint height, uint width);
-        void Sobel(RGB[,] pixels, RGB[,] newPixels, uint height, uint width, int number);
+        RGB[,] Grey(RGB[,] pixels, RGB[,] newPixels, uint height, uint width);
+        RGB[,] Average(RGB[,] pixels, RGB[,] newPixels, uint height, uint width);
+        RGB[,] Gauss3x3Filter(RGB[,] pixels, RGB[,] newPixels, uint height, uint width);
+        RGB[,] Gauss5x5Filter(RGB[,] pixels, RGB[,] newPixels, uint height, uint width);
+        RGB[,] Sobel(RGB[,] pixels, RGB[,] newPixels, uint height, uint width, int number);
 
     }
 }

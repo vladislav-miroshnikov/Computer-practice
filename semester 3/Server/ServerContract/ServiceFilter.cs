@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ServiceModel;
 using System.Drawing;
 using System.IO;
 using System.Configuration;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace ServerContract
 {
@@ -28,33 +27,50 @@ namespace ServerContract
                     return;
                 }
             }
-            Bitmap newImage = null;
+            Bitmap newImage = new Bitmap(inputImage.Width, inputImage.Height);
             RGB[,] pixels = ConvertToArray(inputImage);
             RGB[,] newPixels = new RGB[inputImage.Height, inputImage.Width];
             switch(filterName)
             {
                 case "grey":
-                    new Filters().Grey(pixels, newPixels, (uint)inputImage.Height, (uint)inputImage.Width);              
+                    newPixels = new Filters(OperationContext.Current).Grey(pixels, newPixels, (uint)inputImage.Height, (uint)inputImage.Width);              
                     break;
                 case "average":
-                    new Filters().Average(pixels, newPixels, (uint)inputImage.Height, (uint)inputImage.Width);
+                    newPixels = new Filters(OperationContext.Current).Average(pixels, newPixels, (uint)inputImage.Height, (uint)inputImage.Width);
                     break;
                 case "gauss3x3":
-                    new Filters().Gauss3x3Filter(pixels, newPixels, (uint)inputImage.Height, (uint)inputImage.Width);
+                    newPixels = new Filters(OperationContext.Current).Gauss3x3Filter(pixels, newPixels, (uint)inputImage.Height, (uint)inputImage.Width);
                     break;
                 case "gauss5x5":
-                    new Filters().Gauss5x5Filter(pixels, newPixels, (uint)inputImage.Height, (uint)inputImage.Width);
+                    newPixels = new Filters(OperationContext.Current).Gauss5x5Filter(pixels, newPixels, (uint)inputImage.Height, (uint)inputImage.Width);
                     break;
                 case "sobelX":
-                    new Filters().Sobel(pixels, newPixels, (uint)inputImage.Height, (uint)inputImage.Width, 0);
+                    newPixels = new Filters(OperationContext.Current).Sobel(pixels, newPixels, (uint)inputImage.Height, (uint)inputImage.Width, 0);
                     break;
                 case "sobelY":
-                    new Filters().Sobel(pixels, newPixels, (uint)inputImage.Height, (uint)inputImage.Width, 1);
+                    newPixels = new Filters(OperationContext.Current).Sobel(pixels, newPixels, (uint)inputImage.Height, (uint)inputImage.Width, 1);
                     break;
-                default:
-                    throw new ArgumentException("Check name of filter!");
+            }
+            if(newPixels == null)
+            {
+                Console.WriteLine("Error filtering picture");
+                return;
             }
             newImage = ConvertToBitmap(newPixels, newImage);
+            byte[] newBytes = null;
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                newImage.Save(memoryStream, ImageFormat.Bmp);
+                newBytes = memoryStream.GetBuffer();
+            }
+            try
+            {
+                OperationContext.Current.GetCallbackChannel<ICallBackContract>().ReturnImage(newBytes);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         public List<string> GetListOfFilters()
