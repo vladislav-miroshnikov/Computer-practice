@@ -81,7 +81,7 @@ namespace Client
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filter = "Изображения (*.JPG;*.PNG;*.BMP)|*.JPG;*.PNG;*.BMP" + "|Все файлы|*.* ";
             string path = null;
-            if (dialog.ShowDialog() == true)
+            if ((bool)dialog.ShowDialog())
             {
                 path = dialog.FileName;
             }
@@ -105,7 +105,7 @@ namespace Client
         private void ApplyFilter(object sender, RoutedEventArgs e)
         {
             byte[] bytes = null;
-            if (isCancel == true)
+            if (isCancel)
             {
                 client = new ServerContractClientBase(new InstanceContext(this)); //if abort happened
             }
@@ -157,7 +157,7 @@ namespace Client
 
             MessageBox.Show("Write the name with the extension, for example \"picture.jpg\"");
 
-            if (saveSelection.ShowDialog() == true)
+            if ((bool)saveSelection.ShowDialog())
             {
                 using (MemoryStream ms = new MemoryStream(filteredBytes))
                 {
