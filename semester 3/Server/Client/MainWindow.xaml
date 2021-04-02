@@ -1,0 +1,35 @@
+﻿<Window x:Class="Client.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client"
+        mc:Ignorable="d"
+        Title="Filter Application" Height="445" Width="947" ResizeMode="NoResize">
+    <Grid Height="465" VerticalAlignment="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="281*"/>
+            <RowDefinition Height="243*"/>
+            <RowDefinition Height="54*"/>
+        </Grid.RowDefinitions>
+        <ComboBox x:Name="filtersList" FontSize="18"
+                  HorizontalAlignment="Left" Grid.Row="0"
+                  VerticalAlignment="Top" Width="200" Height="30" 
+                  VerticalContentAlignment="Center" Margin="10,26,0,0"/>
+        <Button x:Name="applyButton" FontSize="18" Visibility="Hidden" Content="Start photo processing" IsEnabled="False" 
+                HorizontalAlignment="Left"
+                  VerticalAlignment="Top" Width="200" Height="30" Click="ApplyFilter" Margin="10,218,0,0" Grid.RowSpan="2"/>
+        <Button x:Name="cancelButton" FontSize="18" Visibility="Hidden" Content="Сancel photo processing" IsEnabled="False" Background="Red"  
+                HorizontalAlignment="Left"
+                  VerticalAlignment="Top" Width="200" Height="30" Click="CancelFilter" Margin="10,46,0,0" Grid.Row="1"/>
+        <ProgressBar x:Name="bar" HorizontalAlignment="Center" Width="927"
+                     Minimum="0" Maximum="100" Value="0" Margin="0,149,0,20" Grid.Row="1"/>
+        <Image x:Name="mainImage" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0"
+               VerticalAlignment="Top"  Width="665" Height="340" Margin="269,10,0,0" Grid.RowSpan="2"/>
+        <Button x:Name="uploadButton" Content="Upload image" HorizontalAlignment="Left" 
+                 Height="30" FontSize="18"
+                 VerticalAlignment="Top" Width="200" Click="SelectImage"
+                 VerticalContentAlignment="Center" Margin="10,104,0,0" Grid.Row="1"/>
+        <Button x:Name="saveButton" Content="Save image" Visibility="Hidden" Click="SaveImage" Height="30" FontSize="18" Margin="10,91,735,105"/>
+    </Grid>
+</Window>

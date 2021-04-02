@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30621.155
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fibers", "Fibers\Fibers.csproj", "{C31CD44C-8FFD-49D1-A399-A5F3D9598947}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FibersLib", "FibersLib\FibersLib.csproj", "{9FB73EB5-DFB7-4D76-81BE-96215072DE5D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fibers.Tests", "Fibers.Tests\Fibers.Tests.csproj", "{852260BD-7C3D-4AE9-8A67-EBAE2FA7FE6A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C31CD44C-8FFD-49D1-A399-A5F3D9598947}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C31CD44C-8FFD-49D1-A399-A5F3D9598947}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C31CD44C-8FFD-49D1-A399-A5F3D9598947}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C31CD44C-8FFD-49D1-A399-A5F3D9598947}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FB73EB5-DFB7-4D76-81BE-96215072DE5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FB73EB5-DFB7-4D76-81BE-96215072DE5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FB73EB5-DFB7-4D76-81BE-96215072DE5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FB73EB5-DFB7-4D76-81BE-96215072DE5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{852260BD-7C3D-4AE9-8A67-EBAE2FA7FE6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{852260BD-7C3D-4AE9-8A67-EBAE2FA7FE6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{852260BD-7C3D-4AE9-8A67-EBAE2FA7FE6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{852260BD-7C3D-4AE9-8A67-EBAE2FA7FE6A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FB24B052-1D22-4CB2-B142-977B3F5EA648}
+	EndGlobalSection
+EndGlobal

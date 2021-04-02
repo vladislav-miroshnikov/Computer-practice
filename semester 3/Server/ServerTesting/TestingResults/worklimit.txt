@@ -1,0 +1,2 @@
+При фиксированном размере изображения 3840x2160 при 30 запросах в секунду происходит отказ от обслуживания по причине превышения time-out в 60 секунд ожидания клиента.
+With a fixed image size of 3840x2160 at 30 requests per second, there is a denial of service due to the time-out exceeding 60 seconds of waiting for the client.
