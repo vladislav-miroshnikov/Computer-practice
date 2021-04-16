@@ -1,4 +1,5 @@
 # Computer-practice
+[![CodeFactor](https://www.codefactor.io/repository/github/vladislav-miroshnikov/computer-practice/badge)](https://www.codefactor.io/repository/github/vladislav-miroshnikov/computer-practice)
 Repository with tasks for computer practice from 1 to 3 semester of the university
 
 C projects represent various tasks for working with memory, writing various data structures, and are the tasks of the first semester of the university.
