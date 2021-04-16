@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7e768121c9cd44b3ad2ac05884ed0dae)](https://app.codacy.com/gh/vladislav-miroshnikov/Computer-practice?utm_source=github.com&utm_medium=referral&utm_content=vladislav-miroshnikov/Computer-practice&utm_campaign=Badge_Grade_Settings)
 [![CodeFactor](https://www.codefactor.io/repository/github/vladislav-miroshnikov/computer-practice/badge)](https://www.codefactor.io/repository/github/vladislav-miroshnikov/computer-practice)
 # Computer-practice
 
