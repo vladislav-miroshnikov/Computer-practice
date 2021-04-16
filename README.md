@@ -1,4 +1,5 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/vladislav-miroshnikov/computer-practice/badge)](https://www.codefactor.io/repository/github/vladislav-miroshnikov/computer-practice)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/68e847f6322443db8893574cf51bb75e)](https://www.codacy.com/gh/vladislav-miroshnikov/Computer-practice/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vladislav-miroshnikov/Computer-practice&amp;utm_campaign=Badge_Grade)
 # Computer-practice
 
 Repository with tasks for computer practice from 1 to 3 semester of the university
